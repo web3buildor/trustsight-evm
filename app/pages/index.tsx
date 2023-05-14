@@ -60,7 +60,12 @@ function Home() {
         <Text className={styles.header} w="100%">
           Explore Projects
         </Text>
-        <HStack w="100%" justifyContent="space-between">
+        <HStack
+          w="100%"
+          justifyContent="space-between"
+          paddingTop=".5rem"
+          paddingBottom=".5rem"
+        >
           {categories.map((value, idx) => (
             <Text
               key={idx}
@@ -79,7 +84,7 @@ function Home() {
           ))}
         </HStack>
         <HStack className={styles.carousel}>
-          {featuredProjects.map(
+          {Object.values(featuredProjects).map(
             ({ title, image, score, address, reviews }, idx) => (
               <VStack
                 key={idx}
@@ -153,7 +158,7 @@ function Home() {
           )}
         </HStack>
       </VStack>
-      <Box h="40px" />
+      <Box h="4rem" />
       <Text className={styles.bold}>
         Built with ❤️ at BNB Zero2Hero Hackathon
       </Text>

@@ -16,10 +16,13 @@ import { abridgeAddress, capitalizeFirstLetter } from "@utils/utils";
 import { Select } from "@chakra-ui/react";
 import { FaFlag } from "react-icons/fa";
 import Identicon from "react-identicons";
-import { useProvider } from "wagmi";
-import { useCallback, useMemo, useState } from "react";
+import { useAccount, useProvider } from "wagmi";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import withTransition from "@components/withTransition";
-import { featuredProjects, mockReviews, reviews, scoreMap } from "@data/data";
+import { featuredProjects, mockReviews, scoreMap } from "@data/data";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import ReviewModal from "@components/ReviewModal";
+import { Metadata } from "@utils/types";
 
 const WEB3_STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY;
 
@@ -32,10 +35,15 @@ function Profile() {
   const provider = useProvider();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [eventLogMap, setEventLogMap] = useState({});
+  const [metadata, setMetadata] = useState<Metadata | undefined>();
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [score, setScore] = useState<number>(0);
   const [trustScoresMap, setTrustScoresMap] = useState({});
   const [attestationMap, setAttestationMap] = useState({ trust: { val: 0 } });
   const [five, setFive] = useState(false);
   const [isLoading, setLoading] = useState<boolean>(false);
+  const { openConnectModal } = useConnectModal();
+  const { address: account } = useAccount();
 
   const [sortReviews, setSortReviews] = useState("recent");
   const [filterReviews, setFilterReviews] = useState("all");
@@ -43,31 +51,33 @@ function Profile() {
   const router = useRouter();
   const { id: address } = router.query;
 
-  const handleReview = () => {};
-  const handleSetFive = () => {};
+  const handleReview = () => {
+    if (!account) {
+      openConnectModal();
+    } else {
+      onOpen();
+    }
+  };
 
-  const filteredReviews = useMemo(
-    () => reviews.filter((r) => r.reviewee === address),
-    [address]
-  );
+  const handleSetFive = () => {};
 
   const reviewList = useMemo(() => {
     if (sortReviews === "recent")
-      return filteredReviews.sort(
+      return reviews.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
     if (sortReviews === "oldest")
-      return filteredReviews.sort(
+      return reviews.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
     else {
-      return filteredReviews.sort(
+      return reviews.sort(
         (a, b) => scoreMap[b.reviewer] - scoreMap[a.reviewer]
       );
     }
-  }, [filteredReviews, sortReviews]);
+  }, [reviews, sortReviews]);
 
   const filteredReviewList = useMemo(() => {
     if (filterReviews === "all") return reviewList;
@@ -86,7 +96,30 @@ function Profile() {
     setFilterReviews(e.target.value);
   }
 
-  if (!address)
+  const fetchMetadata = useCallback(async () => {
+    if (!address) return;
+
+    const res = await fetch(`http://localhost:8000/api/address/${address}`);
+    const data = await res.json();
+    setMetadata(data);
+  }, [address]);
+
+  const fetchReviews = useCallback(async () => {
+    if (!address) return;
+
+    const res = await fetch(`http://localhost:8000/api/reviews/${address}`);
+    const data = await res.json();
+    const { score, reviews } = data;
+    setScore(score);
+    setReviews(reviews);
+  }, [address]);
+
+  useEffect(() => {
+    if (!metadata) fetchMetadata();
+    if (!metadata) fetchReviews();
+  }, [address]);
+
+  if (!metadata)
     return (
       <main className={styles.main}>
         <Spinner></Spinner>
@@ -95,18 +128,28 @@ function Profile() {
 
   const {
     title,
+    subtitle,
     image,
     category,
     createdAt,
     description,
     subscores,
-    reviews: reviewScore,
-    score,
     flags,
-  } = featuredProjects[address as string];
+  } = metadata;
 
   return (
     <main className={styles.main}>
+      <ReviewModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        title={title}
+        image={image}
+        address={address as string}
+        category={category}
+        subscores={subscores}
+        attestationMap={attestationMap}
+      />
       <HStack w="100%" justifyContent="space-between">
         <VStack className={styles.leftSection}>
           <VStack className={styles.stickySection}>
@@ -165,7 +208,9 @@ function Profile() {
             </HStack>
             <HStack>
               <Text className={styles.profileSubtitle}>
-                {abridgeAddress(address as string)}
+                {`${abridgeAddress(address as string)} ${
+                  subtitle ? `(${subtitle})` : ""
+                }`}
               </Text>
               {category && (
                 <VStack className={styles.categoryPill}>
@@ -197,12 +242,13 @@ function Profile() {
                 />
               ))}
               <Text className={styles.scoreText}>
-                {isNaN(eventLogMap["trustsight.trust"] / 100)
+                {/* {isNaN(eventLogMap["trustsight.trust"] / 100)
                   ? 0
-                  : eventLogMap["trustsight.trust"] / 100}
+                  : eventLogMap["trustsight.trust"] / 100} */}
+                {score.toFixed(2)}
               </Text>
               <Text className={styles.reviewsText}>
-                · {reviewScore} reviews
+                · {reviews.length} reviews
               </Text>
             </HStack>
             <Box h="1px"></Box>

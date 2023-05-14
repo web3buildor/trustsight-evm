@@ -16,7 +16,7 @@ export const categories = [
 export const featuredProjects = {
   "0x10ed43c718714eb63d5aa57b78b54704e256024e": {
     title: "PancakeSwap",
-
+    subtitle: "Router v2",
     image: "/pancake.png",
     score: 4.86,
     address: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
