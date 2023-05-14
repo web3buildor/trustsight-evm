@@ -398,8 +398,8 @@
 }
 
 .reviewImage {
-  width: 56px !important;
-  height: 55px !important;
+  width: 80px !important;
+  height: 80px !important;
   border-radius: 10px !important;
 }
 
@@ -412,15 +412,15 @@
 }
 
 .review {
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 18px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
   color: rgba(0, 0, 0, 0.5);
 }
 
 .reviewCard {
-  width: 266px;
-  height: 266px;
+  width: 300px;
+  height: 300px;
 
   background: #ffffff;
   box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.03);
@@ -432,7 +432,7 @@
 .specialWord2 {
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 18px;
   text-align: center;
 
@@ -451,8 +451,8 @@
 }
 
 .profileImage {
-  width: 266px !important;
-  height: 266px !important;
+  width: 300px !important;
+  height: 300px !important;
   border-radius: 20px;
 }
 
@@ -770,4 +770,25 @@
   background: #8a8a8a !important;
   color: white !important;
   border-radius: 20px !important;
+}
+
+.starContainer {
+  width: 207px;
+  position: relative;
+}
+
+.goldStarContainer {
+  z-index: 1;
+  overflow: hidden;
+}
+
+.blankStarContainer {
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute;
+}
+
+.smallStarContainer {
+  width: 157px;
+  position: relative;
 }

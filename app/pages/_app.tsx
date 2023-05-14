@@ -96,6 +96,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
               <link rel="icon" href="/favicon.ico" />
             </Head>
             <Navbar />
+            <div className="fixed-background" />
             <Component {...pageProps} key={router.route} />
           </ChakraProvider>
         </RainbowKitProvider>

@@ -21,7 +21,7 @@ function abridgeCharacters(address?: string, char?: number) {
 
 function Home() {
   const router = useRouter();
-  const [selected, setSelected] = useState("DAO");
+  const [selected, setSelected] = useState("DeFi");
   const isNavbar = false;
   const [inputValue, setInputValue] = useState("");
 
@@ -81,7 +81,12 @@ function Home() {
         <HStack className={styles.carousel}>
           {featuredProjects.map(
             ({ title, image, score, address, reviews }, idx) => (
-              <VStack key={idx} className={styles.projectCard}>
+              <VStack
+                key={idx}
+                className={styles.projectCard}
+                onClick={() => router.push(`/address/${address}`)}
+                cursor="pointer"
+              >
                 <Image src={image} alt="yo" className={styles.projectImage} />
                 <VStack w="100%" pt=".3rem">
                   <HStack className={styles.projectTextContainer}>
