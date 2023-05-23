@@ -16,13 +16,20 @@ import { abridgeAddress, capitalizeFirstLetter } from "@utils/utils";
 import { Select } from "@chakra-ui/react";
 import { FaFlag } from "react-icons/fa";
 import Identicon from "react-identicons";
-import { useAccount, useProvider } from "wagmi";
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useProvider,
+} from "wagmi";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import withTransition from "@components/withTransition";
 import { featuredProjects, mockReviews, scoreMap } from "@data/data";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import ReviewModal from "@components/ReviewModal";
 import { Metadata } from "@utils/types";
+import registryContract from "@data/abi.json";
+import { ethers } from "ethers";
 
 const WEB3_STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY;
 
@@ -39,7 +46,6 @@ function Profile() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [score, setScore] = useState<number>(0);
   const [trustScoresMap, setTrustScoresMap] = useState({});
-  const [attestationMap, setAttestationMap] = useState({ trust: { val: 0 } });
   const [five, setFive] = useState(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const { openConnectModal } = useConnectModal();
@@ -148,7 +154,6 @@ function Profile() {
         address={address as string}
         category={category}
         subscores={subscores}
-        attestationMap={attestationMap}
       />
       <HStack w="100%" justifyContent="space-between">
         <VStack className={styles.leftSection}>

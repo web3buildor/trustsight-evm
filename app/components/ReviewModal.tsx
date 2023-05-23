@@ -20,7 +20,17 @@ import {
 import styles from "@styles/Home.module.css";
 import SuccessLottie from "@components/SuccessLottie";
 import Identicon from "react-identicons";
-import { abridgeAddress, capitalizeFirstLetter } from "@utils/utils";
+import {
+  abridgeAddress,
+  capitalizeFirstLetter,
+  encodeRawKey,
+} from "@utils/utils";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import registryContract from "@data/abi.json";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+
+const REGISTRY = "0x8d52577beae02D3FE7d8C33AF7f5B00c291C7603";
 
 type Props = {
   isOpen: boolean;
@@ -31,7 +41,6 @@ type Props = {
   address: string;
   category: string;
   subscores: any;
-  attestationMap: any;
 };
 
 function ReviewModal({
@@ -43,11 +52,72 @@ function ReviewModal({
   address,
   category,
   subscores,
-  attestationMap,
 }: Props) {
-  const isSuccess = false;
-  const isTxnLoading = false;
-  const data = {};
+  const [reviewMap, setReviewMap] = useState({ trust: { val: 0 } });
+
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite({
+    address: REGISTRY,
+    abi: registryContract.abi,
+    functionName: "createReview",
+    args: [Object.values(reviewMap)],
+  });
+
+  const {
+    data,
+    error,
+    isError,
+    isLoading: isTxnLoading,
+    isSuccess,
+    write,
+  } = useContractWrite(config);
+
+  function handleSetScore(score: number, type: string) {
+    const reviewDeepCopy = JSON.parse(JSON.stringify(reviewMap));
+
+    if (score === reviewDeepCopy[type]["val"]) {
+      reviewDeepCopy[type]["val"] = 0;
+      setReviewMap(reviewDeepCopy);
+    } else {
+      reviewDeepCopy[type]["val"] = score;
+      setReviewMap(reviewDeepCopy);
+    }
+  }
+
+  // initialize reviewMap
+  useEffect(() => {
+    if (!address || !subscores) return;
+
+    const reviewDeepCopy = JSON.parse(JSON.stringify(reviewMap));
+
+    const trustKey = encodeRawKey(`trustsight.trust`);
+
+    const review = {
+      reviewee: address,
+      key: trustKey,
+      val: 0,
+    };
+
+    reviewDeepCopy["trust"] = review;
+
+    subscores.forEach((subscore) => {
+      const reviewKey = encodeRawKey(
+        `trustsight.${category.toLowerCase()}.${subscore}`
+      );
+
+      const review = {
+        reviewee: address,
+        key: reviewKey,
+        val: 0,
+      };
+
+      reviewDeepCopy[subscore] = review;
+    });
+    setReviewMap(reviewDeepCopy);
+  }, [address, subscores]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -91,7 +161,7 @@ function ReviewModal({
                 <HStack gap={2}>
                   <Text className={styles.trustScore}>Trust Score</Text>
                   <HStack>
-                    {new Array(attestationMap["trust"]["val"] / 100)
+                    {new Array(reviewMap["trust"]["val"])
                       .fill(0)
                       .map((_, idx) => (
                         <Image
@@ -99,10 +169,10 @@ function ReviewModal({
                           alt="yo"
                           key={`star-${idx}`}
                           className={styles.largestar}
-                          // onClick={() => handleSetScore(idx + 1, "trust")}
+                          onClick={() => handleSetScore(idx + 1, "trust")}
                         />
                       ))}
-                    {new Array(5 - attestationMap["trust"]["val"] / 100)
+                    {new Array(5 - reviewMap["trust"]["val"])
                       .fill(0)
                       .map((_, idx) => (
                         <Image
@@ -110,12 +180,12 @@ function ReviewModal({
                           alt="yo"
                           key={`blankstar-${idx}`}
                           className={styles.largestar}
-                          // onClick={() =>
-                          //   handleSetScore(
-                          //     attestationMap["trust"]["val"] / 100 + idx + 1,
-                          //     "trust"
-                          //   )
-                          // }
+                          onClick={() =>
+                            handleSetScore(
+                              reviewMap["trust"]["val"] + idx + 1,
+                              "trust"
+                            )
+                          }
                         />
                       ))}
                   </HStack>
@@ -142,9 +212,7 @@ function ReviewModal({
                       </Text>
                       <HStack>
                         {new Array(
-                          type in attestationMap
-                            ? attestationMap[type]["val"] / 100
-                            : 0
+                          type in reviewMap ? reviewMap[type]["val"] : 0
                         )
                           .fill(0)
                           .map((_, idx) => (
@@ -153,13 +221,11 @@ function ReviewModal({
                               alt="yo"
                               key={`star-${idx}`}
                               className={styles.largestar}
-                              // onClick={() => handleSetScore(idx + 1, type)}
+                              onClick={() => handleSetScore(idx + 1, type)}
                             />
                           ))}
                         {new Array(
-                          type in attestationMap
-                            ? 5 - attestationMap[type]["val"] / 100
-                            : 5
+                          type in reviewMap ? 5 - reviewMap[type]["val"] : 5
                         )
                           .fill(0)
                           .map((_, idx) => (
@@ -168,12 +234,12 @@ function ReviewModal({
                               alt="yo"
                               key={`blankstar-${idx}`}
                               className={styles.largestar}
-                              // onClick={() =>
-                              //   handleSetScore(
-                              //     attestationMap[type]["val"] / 100 + idx + 1,
-                              //     type
-                              //   )
-                              // }
+                              onClick={() =>
+                                handleSetScore(
+                                  reviewMap[type]["val"] + idx + 1,
+                                  type
+                                )
+                              }
                             />
                           ))}
                       </HStack>
@@ -192,14 +258,14 @@ function ReviewModal({
         )}
         <ModalFooter className={styles.modalFooter}>
           {isSuccess && data ? (
-            <ChakraLink isExternal href="https://example.com">
+            <ChakraLink
+              isExternal
+              href={`https://testnet.bscscan.com/tx/${data.hash}`}
+            >
               <Button className={styles.submitButton}>View Transaction</Button>
             </ChakraLink>
           ) : (
-            <Button
-              className={styles.submitButton}
-              //   onClick={() => write?.()}
-            >
+            <Button className={styles.submitButton} onClick={() => write?.()}>
               {isTxnLoading ? <Spinner color="white" /> : "Submit Review"}
             </Button>
           )}
