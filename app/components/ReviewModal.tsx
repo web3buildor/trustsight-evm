@@ -25,12 +25,31 @@ import {
   capitalizeFirstLetter,
   encodeRawKey,
 } from "@utils/utils";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import {
+  useContractWrite,
+  usePrepareContractWrite,
+  useProvider,
+  useSigner,
+} from "wagmi";
 import registryContract from "@data/abi.json";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
+import { Web3Storage } from "web3.storage";
+import axios from "axios";
 
 const REGISTRY = "0x8d52577beae02D3FE7d8C33AF7f5B00c291C7603";
+
+const WEB3_STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY;
+
+const client = new Web3Storage({
+  token: WEB3_STORAGE_TOKEN,
+  endpoint: new URL("https://api.web3.storage"),
+});
+
+type CachedReview = {
+  reviewee: string;
+  [key: string]: string | number;
+};
 
 type Props = {
   isOpen: boolean;
@@ -39,6 +58,7 @@ type Props = {
   title: string;
   image: string;
   address: string;
+  account: string;
   category: string;
   subscores: any;
 };
@@ -50,10 +70,39 @@ function ReviewModal({
   title,
   image,
   address,
+  account,
   category,
   subscores,
 }: Props) {
-  const [reviewMap, setReviewMap] = useState({ trust: { val: 0 } });
+  const { data: signer } = useSigner();
+  const [comment, setComment] = useState("");
+  const [txnHash, setTxnHash] = useState<string>("");
+  const [reviewMap, setReviewMap] = useState({
+    trust: { reviewee: "", key: "", val: 0 },
+  });
+
+  async function cacheReview(txn: string) {
+    let cachedReview: CachedReview = {
+      reviewer: account,
+      reviewee: reviewMap.trust.reviewee,
+      comment,
+      transaction: txn,
+    };
+
+    for (let category in reviewMap) {
+      cachedReview[category] = reviewMap[category].val;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/reviews", {
+        review: cachedReview,
+      });
+
+      console.log(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   const {
     config,
@@ -75,6 +124,60 @@ function ReviewModal({
     write,
   } = useContractWrite(config);
 
+  async function uploadComment() {
+    const blob = new Blob(
+      [
+        JSON.stringify({
+          comment,
+        }),
+      ],
+      {
+        type: "application/json",
+      }
+    );
+
+    const files = [new File([blob], "comment.json")];
+    const jsonCID = await client.put(files);
+    const commentURL = `https://${jsonCID}.ipfs.w3s.link/comment.json`;
+    console.log(`uploaded comment URL: ${commentURL}`);
+
+    return commentURL;
+  }
+
+  async function attachComment() {
+    const commentURL = await uploadComment();
+
+    const review = {
+      reviewee: address,
+      key: encodeRawKey(`trustsight.comment`),
+      val: ethers.utils.toUtf8Bytes(commentURL),
+    };
+
+    const reviewDeepCopy = JSON.parse(JSON.stringify(reviewMap));
+    reviewDeepCopy["comment"] = review;
+    return reviewDeepCopy;
+  }
+
+  async function createReview() {
+    if (comment) {
+      const newReviewMap = await attachComment();
+
+      const ethersRegistryContract = new ethers.Contract(
+        REGISTRY,
+        registryContract.abi,
+        signer
+      );
+
+      const txn = await ethersRegistryContract.createReview(
+        Object.values(newReviewMap)
+      );
+      setTxnHash(txn);
+      await cacheReview(txn);
+    } else {
+      write?.();
+    }
+  }
+
   function handleSetScore(score: number, type: string) {
     const reviewDeepCopy = JSON.parse(JSON.stringify(reviewMap));
 
@@ -85,6 +188,10 @@ function ReviewModal({
       reviewDeepCopy[type]["val"] = score;
       setReviewMap(reviewDeepCopy);
     }
+  }
+
+  function handleSetComment(e) {
+    setComment(e.target.value);
   }
 
   // initialize reviewMap
@@ -127,7 +234,7 @@ function ReviewModal({
           <Text className={styles.yourReview}>Your Review</Text>
         </ModalHeader>
         <ModalCloseButton />
-        {isSuccess && data ? (
+        {(isSuccess && data) || txnHash ? (
           <VStack className={styles.lottieContainer}>
             <SuccessLottie />
             <Text className={styles.subHeader} pb="1rem">
@@ -251,21 +358,27 @@ function ReviewModal({
               <VStack w="100%" alignItems="flex-start">
                 <Text className={styles.trustScore}>Comments</Text>
                 <Box h="5px"></Box>
-                <Textarea placeholder="Write your review" />
+                <Textarea
+                  placeholder="Write your review"
+                  value={comment}
+                  onChange={handleSetComment}
+                />
               </VStack>
             </VStack>
           </ModalBody>
         )}
         <ModalFooter className={styles.modalFooter}>
-          {isSuccess && data ? (
+          {(isSuccess && data) || txnHash ? (
             <ChakraLink
               isExternal
-              href={`https://testnet.bscscan.com/tx/${data.hash}`}
+              href={`https://testnet.bscscan.com/tx/${
+                txnHash === "" ? data.hash : txnHash
+              }`}
             >
               <Button className={styles.submitButton}>View Transaction</Button>
             </ChakraLink>
           ) : (
-            <Button className={styles.submitButton} onClick={() => write?.()}>
+            <Button className={styles.submitButton} onClick={createReview}>
               {isTxnLoading ? <Spinner color="white" /> : "Submit Review"}
             </Button>
           )}

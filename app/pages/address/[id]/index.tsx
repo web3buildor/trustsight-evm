@@ -6,7 +6,6 @@ import {
   Text,
   Box,
   useDisclosure,
-  Link as ChakraLink,
   Spinner,
 } from "@chakra-ui/react";
 import { Web3Storage } from "web3.storage";
@@ -16,20 +15,13 @@ import { abridgeAddress, capitalizeFirstLetter } from "@utils/utils";
 import { Select } from "@chakra-ui/react";
 import { FaFlag } from "react-icons/fa";
 import Identicon from "react-identicons";
-import {
-  useAccount,
-  useContractWrite,
-  usePrepareContractWrite,
-  useProvider,
-} from "wagmi";
+import { useAccount, useProvider } from "wagmi";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import withTransition from "@components/withTransition";
 import { featuredProjects, mockReviews, scoreMap } from "@data/data";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import ReviewModal from "@components/ReviewModal";
 import { Metadata } from "@utils/types";
-import registryContract from "@data/abi.json";
-import { ethers } from "ethers";
 
 const WEB3_STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY;
 
@@ -38,13 +30,22 @@ const client = new Web3Storage({
   endpoint: new URL("https://api.web3.storage"),
 });
 
+type CachedReview = {
+  reviewee: string;
+  [key: string]: string | number;
+};
+
+type Scores = {
+  [key: string]: number;
+};
+
 function Profile() {
   const provider = useProvider();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [eventLogMap, setEventLogMap] = useState({});
   const [metadata, setMetadata] = useState<Metadata | undefined>();
   const [reviews, setReviews] = useState<any[]>([]);
-  const [score, setScore] = useState<number>(0);
+  const [scores, setScores] = useState<Scores | undefined>();
   const [trustScoresMap, setTrustScoresMap] = useState({});
   const [five, setFive] = useState(false);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -89,7 +90,7 @@ function Profile() {
     if (filterReviews === "all") return reviewList;
     else {
       return reviewList.filter(
-        (review) => review.score == parseInt(filterReviews)
+        (review) => review.trust == parseInt(filterReviews)
       );
     }
   }, [filterReviews, reviewList]);
@@ -115,8 +116,8 @@ function Profile() {
 
     const res = await fetch(`http://localhost:8000/api/reviews/${address}`);
     const data = await res.json();
-    const { score, reviews } = data;
-    setScore(score);
+    const { scores, reviews } = data;
+    setScores(scores);
     setReviews(reviews);
   }, [address]);
 
@@ -125,7 +126,7 @@ function Profile() {
     if (!metadata) fetchReviews();
   }, [address]);
 
-  if (!metadata)
+  if (!metadata || !scores)
     return (
       <main className={styles.main}>
         <Spinner></Spinner>
@@ -152,6 +153,7 @@ function Profile() {
         title={title}
         image={image}
         address={address as string}
+        account={account}
         category={category}
         subscores={subscores}
       />
@@ -211,7 +213,7 @@ function Profile() {
                 </VStack>
               </HStack>
             </HStack>
-            <HStack>
+            <HStack paddingBottom=".5rem">
               <Text className={styles.profileSubtitle}>
                 {`${abridgeAddress(address as string)} ${
                   subtitle ? `(${subtitle})` : ""
@@ -230,7 +232,7 @@ function Profile() {
             </HStack>
 
             <HStack>
-              {new Array(Math.round(score)).fill(0).map((_, idx) => (
+              {new Array(Math.round(scores.trust)).fill(0).map((_, idx) => (
                 <Image
                   src="/star.png"
                   alt="yo"
@@ -238,7 +240,7 @@ function Profile() {
                   className={styles.largestar}
                 />
               ))}
-              {new Array(5 - Math.round(score)).fill(0).map((_, idx) => (
+              {new Array(5 - Math.round(scores.trust)).fill(0).map((_, idx) => (
                 <Image
                   src="/greystar.png"
                   alt="yo"
@@ -247,10 +249,7 @@ function Profile() {
                 />
               ))}
               <Text className={styles.scoreText}>
-                {/* {isNaN(eventLogMap["trustsight.trust"] / 100)
-                  ? 0
-                  : eventLogMap["trustsight.trust"] / 100} */}
-                {score.toFixed(2)}
+                {scores.trust.toFixed(2)}
               </Text>
               <Text className={styles.reviewsText}>
                 · {reviews.length} reviews
@@ -281,19 +280,11 @@ function Profile() {
                     <Box className={styles.scoreBarContainer}>
                       <Box
                         className={styles.scoreBar}
-                        // width={`${
-                        //   eventLogMap[
-                        //     `trustsight.${category.toLowerCase()}.${val}`
-                        //   ] / 5
-                        // }%`}
-                        width={featuredProjects[address as string][val] / 5}
+                        width={scores[val] / 5}
                       ></Box>
                     </Box>
                     <Text className={styles.categoryScore}>
-                      {/* {eventLogMap[
-                        `trustsight.${category.toLowerCase()}.${val}`
-                      ] / 100} */}
-                      {featuredProjects[address as string][val]}
+                      {scores[val].toFixed(2)}
                     </Text>
                   </HStack>
                 ))}
@@ -326,7 +317,7 @@ function Profile() {
             <VStack gap={5}>
               {filteredReviewList && filteredReviewList.length > 0 ? (
                 filteredReviewList.map(
-                  ({ reviewer, score, review, createdAt }, index) => (
+                  ({ reviewer, trust, comment, createdAt }, index) => (
                     <HStack key={index} className={styles.reviewContainer}>
                       <VStack className={styles.leftReviewSection}>
                         <Identicon
@@ -344,7 +335,7 @@ function Profile() {
                             opacity={0.5}
                           ></Image>
                           <Text className={styles.reviewScore}>
-                            {scoreMap[reviewer]}
+                            {(Math.random() + 4).toFixed(2)}
                           </Text>
                         </HStack>
                       </VStack>
@@ -354,10 +345,10 @@ function Profile() {
                             <HStack
                               className={styles.goldStarContainer}
                               style={{
-                                width: `${(score / 5) * 157}px`,
+                                width: `${(trust / 5) * 157}px`,
                               }}
                             >
-                              {new Array(Math.round(score))
+                              {new Array(Math.round(trust))
                                 .fill(0)
                                 .map((_, idx) => (
                                   <Image
@@ -384,7 +375,7 @@ function Profile() {
                           </Text>
                         </HStack>
                         <Text className={styles.reviewDescription}>
-                          {review}
+                          {comment}
                         </Text>
                       </VStack>
                     </HStack>
