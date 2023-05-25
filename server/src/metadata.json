@@ -1,0 +1,12 @@
+{
+  "name": "TrustSight SoulBound Profile Token",
+  "description": "TrustSight SoulBound Profile Token for {address}",
+  "image": "https://bafkreigmxaglcivuzullazjnwvmtbzo3ioqeqp54azgw2lr66oy6rpvowa.ipfs.nftstorage.link/",
+  "image_url": "https://bafkreigmxaglcivuzullazjnwvmtbzo3ioqeqp54azgw2lr66oy6rpvowa.ipfs.nftstorage.link/",
+  "attributes": [
+    {
+      "trait_type": "Trust Score",
+      "value": 5
+    }
+  ]
+}
