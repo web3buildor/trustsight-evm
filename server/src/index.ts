@@ -123,14 +123,20 @@ app.get("/api/reviews/:address", async (req: Request, res: Response) => {
       .collection("reviews");
 
     const reviews = await reviewsCollection
-      .find({ reviewee: address })
+      .find({
+        $or: [{ reviewee: address }, { reviewer: address }],
+      })
       .toArray();
 
-    const average = computeAverage(reviews);
+    const givenReviews = reviews.filter((r) => r.reviewer === address);
+    const receivedReviews = reviews.filter((r) => r.reviewee === address);
+
+    const average = computeAverage(receivedReviews);
 
     res.status(200).send({
       scores: average,
-      reviews: reviews,
+      givenReviews,
+      receivedReviews,
     });
   } catch (error) {
     console.error("Error while fetching reviews:", error);
