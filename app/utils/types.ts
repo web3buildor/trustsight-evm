@@ -1,5 +1,5 @@
 export type Metadata = {
-  title: string;
+  username: string;
   subtitle: string;
   image: string;
   score: number;

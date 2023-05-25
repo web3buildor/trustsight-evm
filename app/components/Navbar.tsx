@@ -28,6 +28,9 @@ const Navbar = () => {
             <Link href="/explore">
               <MenuItem>Explore</MenuItem>
             </Link>
+            <Link href="/feed">
+              <MenuItem>Feed</MenuItem>
+            </Link>
             <Link href={`/address/${address}`}>
               <MenuItem>My Profile</MenuItem>
             </Link>

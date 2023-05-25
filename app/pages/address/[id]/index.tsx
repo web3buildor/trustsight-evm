@@ -7,21 +7,30 @@ import {
   Box,
   useDisclosure,
   Spinner,
+  IconButton,
+  Input,
+  Button,
 } from "@chakra-ui/react";
-import { Web3Storage } from "web3.storage";
 
 import { useRouter } from "next/router";
 import { abridgeAddress, capitalizeFirstLetter } from "@utils/utils";
 import { Select } from "@chakra-ui/react";
-import { FaFlag } from "react-icons/fa";
-import Identicon from "react-identicons";
+import { FaCheck, FaFlag, FaPen } from "react-icons/fa";
 import { useAccount, useProvider } from "wagmi";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import withTransition from "@components/withTransition";
-import { featuredProjects, mockReviews, scoreMap } from "@data/data";
+import Jdenticon from "react-jdenticon";
+
+import { scoreMap } from "@data/data";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import ReviewModal from "@components/ReviewModal";
 import { Metadata } from "@utils/types";
+import axios from "axios";
+import { Web3Storage } from "web3.storage";
+
+type Scores = {
+  [key: string]: number;
+};
 
 const WEB3_STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY;
 
@@ -30,27 +39,20 @@ const client = new Web3Storage({
   endpoint: new URL("https://api.web3.storage"),
 });
 
-type CachedReview = {
-  reviewee: string;
-  [key: string]: string | number;
-};
-
-type Scores = {
-  [key: string]: number;
-};
-
 function Profile() {
-  const provider = useProvider();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [eventLogMap, setEventLogMap] = useState({});
   const [metadata, setMetadata] = useState<Metadata | undefined>();
   const [reviews, setReviews] = useState<any[]>([]);
   const [scores, setScores] = useState<Scores | undefined>();
-  const [trustScoresMap, setTrustScoresMap] = useState({});
-  const [five, setFive] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<any>();
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isEditingImage, setIsEditingImage] = useState<boolean>(false);
+  const [isEditingName, setIsEditingName] = useState<boolean>(false);
   const { openConnectModal } = useConnectModal();
   const { address: account } = useAccount();
+  const [newUsername, setNewUsername] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string>("");
 
   const [sortReviews, setSortReviews] = useState("recent");
   const [filterReviews, setFilterReviews] = useState("all");
@@ -65,8 +67,6 @@ function Profile() {
       onOpen();
     }
   };
-
-  const handleSetFive = () => {};
 
   const reviewList = useMemo(() => {
     if (sortReviews === "recent")
@@ -103,12 +103,56 @@ function Profile() {
     setFilterReviews(e.target.value);
   }
 
+  function handleUsernameChange(e) {
+    e.preventDefault();
+    setNewUsername(e.target.value);
+  }
+
+  function handleFileUpload(e) {
+    setIsEditingImage(true);
+    setUploadedFile(e.target.files[0]);
+  }
+
+  async function handleSaveImage() {
+    if (!uploadedFile) {
+      setIsEditingImage(false);
+      return;
+    }
+
+    const blob = new Blob([uploadedFile], { type: "application/png" });
+    const imageToUpload = [new File([blob], "image.png")];
+    const imageCID = await client.put(imageToUpload);
+    const imageLink = `https://${imageCID}.ipfs.w3s.link/image.png`;
+
+    const response = await axios.post(`http://localhost:8000/api/address`, {
+      address: account,
+      image: imageLink,
+    });
+
+    if (response.status === 200) {
+      await fetchMetadata();
+    }
+
+    setIsEditingImage(false);
+  }
+
+  async function handleEditNameMode() {
+    if (isEditingName) {
+      await updateUsername();
+      setIsEditingName(false);
+    } else {
+      setIsEditingName(true);
+    }
+  }
+
   const fetchMetadata = useCallback(async () => {
     if (!address) return;
 
     const res = await fetch(`http://localhost:8000/api/address/${address}`);
     const data = await res.json();
     setMetadata(data);
+    setUsername(data.username);
+    setProfileImage(data.image);
   }, [address]);
 
   const fetchReviews = useCallback(async () => {
@@ -121,20 +165,44 @@ function Profile() {
     setReviews(reviews);
   }, [address]);
 
+  const updateUsername = useCallback(async () => {
+    try {
+      const response = await axios.post(`http://localhost:8000/api/address`, {
+        address: account,
+        username: newUsername,
+      });
+
+      if (response.status === 200) {
+        await fetchMetadata();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [account, fetchMetadata, newUsername]);
+
   useEffect(() => {
-    if (!metadata) fetchMetadata();
-    if (!metadata) fetchReviews();
+    // setLoading(true);
+    // const timer = setTimeout(() => {
+    //   setLoading(false);
+    // }, 1500);
+
+    fetchMetadata();
+    fetchReviews();
+
+    // return () => clearTimeout(timer);
   }, [address]);
 
-  if (!metadata || !scores)
+  if (!metadata || !scores || isLoading)
     return (
       <main className={styles.main}>
-        <Spinner></Spinner>
+        <VStack pt="4rem">
+          <Spinner size="lg"></Spinner>
+        </VStack>
       </main>
     );
 
   const {
-    title,
+    username: name,
     subtitle,
     image,
     category,
@@ -144,13 +212,15 @@ function Profile() {
     flags,
   } = metadata;
 
+  const profileName = name ? name : abridgeAddress(address as string);
+
   return (
     <main className={styles.main}>
       <ReviewModal
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
-        title={title}
+        username={username}
         image={image}
         address={address as string}
         account={account}
@@ -160,18 +230,50 @@ function Profile() {
       <HStack w="100%" justifyContent="space-between">
         <VStack className={styles.leftSection}>
           <VStack className={styles.stickySection}>
-            {image ? (
+            {uploadedFile ? (
               <Image
-                src={image}
+                src={URL.createObjectURL(uploadedFile)}
+                alt={image}
+                className={styles.profileImage}
+              ></Image>
+            ) : profileImage ? (
+              <Image
+                src={profileImage}
                 alt={image}
                 className={styles.profileImage}
               ></Image>
             ) : (
-              <Identicon
-                string={address as string}
+              <Jdenticon
+                value={address as string}
                 className={styles.profileImage}
               />
             )}
+            {address === account &&
+              (isEditingImage ? (
+                <VStack pt="1rem">
+                  <Button
+                    className={styles.editImageBtn}
+                    onClick={handleSaveImage}
+                  >
+                    Save new image
+                  </Button>
+                </VStack>
+              ) : (
+                <VStack className={styles.fileUploadContainer}>
+                  <input
+                    type="file"
+                    name="images"
+                    id="images"
+                    required
+                    multiple
+                    onChange={handleFileUpload}
+                    className={styles.fileUploader}
+                  />
+                  <Button className={styles.editImageBtn}>
+                    Edit profile image
+                  </Button>
+                </VStack>
+              ))}
             <Box h="10px"></Box>
             <VStack onClick={handleReview} cursor="pointer">
               <HStack>
@@ -192,9 +294,26 @@ function Profile() {
         <VStack className={styles.rightSection}>
           <VStack className={styles.rightInnerSection}>
             <HStack w="100%" justifyContent="space-between">
-              <Text className={styles.profileTitle}>
-                {title ? title : abridgeAddress(address as string)}
-              </Text>
+              <HStack>
+                {isEditingName ? (
+                  <Input
+                    placeholder={profileName}
+                    value={newUsername}
+                    onChange={handleUsernameChange}
+                    width="80%"
+                  ></Input>
+                ) : (
+                  <Text className={styles.profileTitle}>{profileName}</Text>
+                )}
+                {address === account && (
+                  <Box pl=".5rem" onClick={handleEditNameMode}>
+                    <IconButton
+                      aria-label="Edit profile"
+                      icon={isEditingName ? <FaCheck /> : <FaPen />}
+                    />
+                  </Box>
+                )}
+              </HStack>
               <HStack>
                 <VStack>
                   <HStack>
@@ -230,31 +349,10 @@ function Profile() {
                 </VStack>
               )}
             </HStack>
-
-            <HStack>
-              {new Array(Math.round(scores.trust)).fill(0).map((_, idx) => (
-                <Image
-                  src="/star.png"
-                  alt="yo"
-                  key={idx}
-                  className={styles.largestar}
-                />
-              ))}
-              {new Array(5 - Math.round(scores.trust)).fill(0).map((_, idx) => (
-                <Image
-                  src="/greystar.png"
-                  alt="yo"
-                  key={idx}
-                  className={styles.largestar}
-                />
-              ))}
-              <Text className={styles.scoreText}>
-                {scores.trust.toFixed(2)}
-              </Text>
-              <Text className={styles.reviewsText}>
-                · {reviews.length} reviews
-              </Text>
-            </HStack>
+            <StarRating
+              score={scores.trust ?? 0}
+              reviewCount={reviews.length}
+            />
             <Box h="1px"></Box>
             <Text className={styles.description}>
               {description ?? "No description available."}
@@ -320,10 +418,12 @@ function Profile() {
                   ({ reviewer, trust, comment, createdAt }, index) => (
                     <HStack key={index} className={styles.reviewContainer}>
                       <VStack className={styles.leftReviewSection}>
-                        <Identicon
-                          string={reviewer as string}
+                        <Jdenticon
+                          value={reviewer as string}
                           className={styles.reviewImage}
+                          size="48"
                         />
+
                         <Text className={styles.reviewReviewer}>
                           {abridgeAddress(reviewer)}
                         </Text>
@@ -393,3 +493,46 @@ function Profile() {
 }
 
 export default withTransition(Profile);
+
+function StarRating({ score, reviewCount }) {
+  const filledStars = Math.floor(score);
+  const partialStar = score - filledStars;
+
+  return (
+    <HStack position="relative">
+      <HStack width="210px">
+        <HStack zIndex={1}>
+          {[...Array(filledStars)].map((_, idx) => (
+            <Image src="/star.png" alt="Full star" key={idx} width="35px" />
+          ))}
+          {partialStar > 0 && (
+            <Box
+              width={`${35 * partialStar}px`}
+              height="35px"
+              overflow="hidden"
+            >
+              <Box
+                width="35px"
+                height="35px"
+                background={`url(/star.png)`}
+                backgroundSize="cover"
+              />
+            </Box>
+          )}
+        </HStack>
+        <HStack position="absolute" margin="0 !important" zIndex={0}>
+          {[...Array(5)].map((_, idx) => (
+            <Image
+              src="/greystar.png"
+              alt="Empty star"
+              key={idx}
+              width="35px"
+            />
+          ))}
+        </HStack>
+      </HStack>
+      <Text className={styles.scoreText}>{score ? score.toFixed(2) : "0"}</Text>
+      <Text className={styles.reviewsText}>· {reviewCount} reviews</Text>
+    </HStack>
+  );
+}

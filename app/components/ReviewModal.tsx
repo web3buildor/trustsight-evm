@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import styles from "@styles/Home.module.css";
 import SuccessLottie from "@components/SuccessLottie";
-import Identicon from "react-identicons";
+import Jdenticon from "react-jdenticon";
 import {
   abridgeAddress,
   capitalizeFirstLetter,
@@ -55,7 +55,7 @@ type Props = {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  title: string;
+  username: string;
   image: string;
   address: string;
   account: string;
@@ -67,7 +67,7 @@ function ReviewModal({
   isOpen,
   onOpen,
   onClose,
-  title,
+  username,
   image,
   address,
   account,
@@ -253,13 +253,13 @@ function ReviewModal({
                       className={styles.modalImage}
                     ></Image>
                   ) : (
-                    <Identicon
-                      string={address as string}
-                      className={styles.modalImage}
+                    <Jdenticon
+                      value={address as string}
+                      className={styles.profileImage}
                     />
                   )}
                   <VStack className={styles.modalTitleSection}>
-                    <Text className={styles.modalTitle}>{title}</Text>
+                    <Text className={styles.modalTitle}>{username}</Text>
                     <Text className={styles.modalAddress}>
                       {abridgeAddress(address as string)}
                     </Text>
@@ -298,18 +298,22 @@ function ReviewModal({
                   </HStack>
                 </HStack>
               </HStack>
-              <Box h="10px"></Box>
-              <HStack>
-                {category && (
-                  <VStack className={styles.categoryPill}>
-                    <Text className={styles.categoryPillText}>{category}</Text>
-                  </VStack>
-                )}
-                <Text className={styles.subHeader}>
-                  Category scores (optional)
-                </Text>
-              </HStack>
-              <Box h="10px"></Box>
+              {category && (
+                <VStack>
+                  <Box h="10px"></Box>
+                  <HStack>
+                    <VStack className={styles.categoryPill}>
+                      <Text className={styles.categoryPillText}>
+                        {category}
+                      </Text>
+                    </VStack>
+                    <Text className={styles.subHeader}>
+                      Category scores (optional)
+                    </Text>
+                  </HStack>
+                  <Box h="10px"></Box>
+                </VStack>
+              )}
               {subscores && subscores.length > 0 && (
                 <SimpleGrid columns={2} gap={6}>
                   {subscores.map((type) => (
