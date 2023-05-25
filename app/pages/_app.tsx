@@ -54,12 +54,6 @@ const selectTheme = defineMultiStyleConfig({
   variants: { custom },
 });
 
-declare global {
-  interface Window {
-    Cypher?: any;
-  }
-}
-
 const theme = extendTheme({
   styles: {
     global: {
