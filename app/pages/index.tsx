@@ -3,7 +3,12 @@ import { HStack, VStack, Text, Input, Image, Box } from "@chakra-ui/react";
 import styles from "@styles/Home.module.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { categories, featuredProjects, featuredReviews } from "@data/data";
+import {
+  categories,
+  featuredProjects,
+  featuredReviews,
+  projects,
+} from "@data/data";
 
 function abridgeAddress(address?: string) {
   if (!address) return address;
@@ -84,8 +89,10 @@ function Home() {
           ))}
         </HStack>
         <HStack className={styles.carousel}>
-          {Object.values(featuredProjects).map(
-            ({ title, image, score, address, reviews }, idx) => (
+          {projects
+            .filter((p) => p.category === selected.toLocaleLowerCase())
+            .slice(0, 4)
+            .map(({ title, image, score, address, reviews }, idx) => (
               <VStack
                 key={idx}
                 className={styles.projectCard}
@@ -115,8 +122,7 @@ function Home() {
                   </HStack>
                 </VStack>
               </VStack>
-            )
-          )}
+            ))}
         </HStack>
       </VStack>
       <Box h="60px" />

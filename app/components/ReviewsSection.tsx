@@ -210,7 +210,9 @@ function ReviewsSection({
                   )
                 )
               ) : (
-                <Text>No reviews available.</Text>
+                <VStack w="890px">
+                  <Text>No reviews available.</Text>
+                </VStack>
               )}
             </VStack>
           </TabPanel>
@@ -285,7 +287,9 @@ function ReviewsSection({
                   )
                 )
               ) : (
-                <Text>No reviews available.</Text>
+                <VStack w="890px">
+                  <Text>No reviews available.</Text>
+                </VStack>
               )}
             </VStack>
           </TabPanel>

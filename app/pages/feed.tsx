@@ -166,7 +166,9 @@ function Feed() {
               )
             )
           ) : (
-            <Text>No reviews available.</Text>
+            <VStack w="890px">
+              <Text>No reviews available.</Text>
+            </VStack>
           )}
           {renderedReviews.length < reviews.length ? (
             <Button onClick={handleLoadMore}>Load More</Button>

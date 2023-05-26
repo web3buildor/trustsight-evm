@@ -55,11 +55,152 @@ export const featuredProjects = {
   },
 };
 
+export const projects = [
+  {
+    title: "PancakeSwap",
+    image: "/defi/pancake.png",
+    score: 4.82,
+    address: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviews: 17,
+    category: "defi",
+  },
+  {
+    title: "1inch Network",
+    image: "/defi/1inch.png",
+    score: 4.92,
+    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    reviews: 29,
+    category: "defi",
+  },
+  {
+    title: "Bitkeep Swap",
+    image: "/defi/bitkeep.png",
+    score: 4.79,
+    address: "0xD1ca1F4dBB645710f5D5a9917AA984a47524f49A",
+    reviews: 9,
+    category: "defi",
+  },
+  {
+    title: "Stargate Finance",
+    image: "/defi/stargate.jpg",
+    score: 4.83,
+    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    reviews: 21,
+    category: "defi",
+  },
+  {
+    title: "Apeswap",
+    image: "/defi/apeswap.png",
+    score: 4.82,
+    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    reviews: 2048,
+    category: "defi",
+  },
+
+  {
+    title: "Autoshark Finance",
+    image: "/defi/autoshark.png",
+    score: 4.96,
+    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    reviews: 29,
+    category: "defi",
+  },
+  {
+    title: "Biswap",
+    image: "/defi/biswap.png",
+    score: 4.82,
+    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    reviews: 2048,
+    category: "defi",
+  },
+
+  {
+    title: "Bungee",
+    image: "/defi/bungee.png",
+    score: 4.82,
+    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    reviews: 2048,
+    category: "defi",
+  },
+  {
+    title: "DexView",
+    image: "/defi/dexview.png",
+    score: 4.96,
+    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    reviews: 29,
+    category: "defi",
+  },
+  {
+    title: "Opensea",
+    image: "/nft/opensea.png",
+    score: 4.78,
+    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    reviews: 48,
+    category: "nft",
+  },
+  {
+    title: "Element Market",
+    image: "/nft/element.jpg",
+    score: 4.73,
+    address: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
+    reviews: 8,
+    category: "nft",
+  },
+  {
+    title: "Galxe",
+    image: "/nft/galxe.jpg",
+    score: 4.81,
+    address: "0x9507c04B10486547584C37bCBd931B2a4FeE9A41",
+    reviews: 37,
+    category: "nft",
+  },
+  {
+    title: "NFTKEY Market",
+    image: "/nft/nftkey.png",
+    score: 4.79,
+    address: "0xCBD6832Ebc203e49E2B771897067fce3c58575ac",
+    reviews: 19,
+    category: "nft",
+  },
+  {
+    title: "NFTb",
+    image: "/nft/nftb.png",
+    score: 4.82,
+    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    reviews: 2048,
+    category: "nft",
+  },
+  {
+    title: "Rareboard",
+    image: "/nft/rareboard.jpg",
+    score: 4.96,
+    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    reviews: 29,
+    category: "nft",
+  },
+  {
+    title: "VIMWorld",
+    image: "/nft/vimworld.jpg",
+    score: 4.82,
+    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    reviews: 2048,
+    category: "nft",
+  },
+  {
+    title: "Bitkeep NFT Market",
+    image: "/nft/bitkeep.png",
+    score: 4.96,
+    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    reviews: 29,
+    category: "nft",
+  },
+];
+
 export const featuredReviews = [
   {
     image: "/1.png",
     stars: 5,
-    reviewer: "martinc.eth",
+    reviewer: "TechieTornado",
     recipient:
       featuredProjects["0x10ed43c718714eb63d5aa57b78b54704e256024e"].title,
     review:
@@ -68,7 +209,7 @@ export const featuredReviews = [
   {
     image: "/2.png",
     stars: 5,
-    reviewer: "martinc.eth",
+    reviewer: "0xMarmalade",
     recipient:
       featuredProjects["0x1111111254fb6c44bAC0beD2854e76F90643097d"].title,
     review:
@@ -77,7 +218,7 @@ export const featuredReviews = [
   {
     image: "/3.png",
     stars: 5,
-    reviewer: "martinc.eth",
+    reviewer: "DigitalGuru21",
     recipient:
       featuredProjects["0x10ed43c718714eb63d5aa57b78b54704e256024e"].title,
     review:
@@ -86,7 +227,7 @@ export const featuredReviews = [
   {
     image: "/4.png",
     stars: 5,
-    reviewer: "martinc.eth",
+    reviewer: "degen-kungfu",
     recipient:
       featuredProjects["0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8"].title,
     review:

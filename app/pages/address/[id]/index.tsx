@@ -8,24 +8,29 @@ import {
   Spinner,
   IconButton,
   Input,
+  Button,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { abridgeAddress, capitalizeFirstLetter } from "@utils/utils";
-import { FaCheck, FaFlag, FaPen } from "react-icons/fa";
-import { useAccount } from "wagmi";
+import { FaCheck, FaFlag, FaPen, FaStar } from "react-icons/fa";
+import { useAccount, useSigner } from "wagmi";
 import { useCallback, useEffect, useState } from "react";
 import withTransition from "@components/withTransition";
 import ReviewModal from "@components/ReviewModal";
 import { Metadata } from "@utils/types";
 import axios from "axios";
-import { Web3Storage } from "web3.storage";
 import ProfileSection from "@components/ProfileSection";
 import StarRating from "@components/StarRating";
 import ReviewsSection from "@components/ReviewsSection";
+import { ethers } from "ethers";
+
+import sbtContract from "@data/sbt.json";
 
 type Scores = {
   [key: string]: number;
 };
+
+const SBT = "0x718F299076eC91cF070Df6467c327f5b49d613c9";
 
 function Profile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,13 +41,36 @@ function Profile() {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
 
+  const { data: signer } = useSigner();
   const { address: account } = useAccount();
   const [newUsername, setNewUsername] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [profileImage, setProfileImage] = useState<string>("");
+  const [txnHash, setTxnHash] = useState<string>("");
 
   const router = useRouter();
   const { id: address } = router.query;
+
+  async function fetchTokenURI() {
+    const res = await fetch(`http://localhost:8000/api/sbt/${address}`);
+    const { tokenURI } = await res.json();
+    return tokenURI;
+  }
+
+  async function mintSBT() {
+    if (address) {
+      const tokenURI = await fetchTokenURI();
+
+      const ethersRegistryContract = new ethers.Contract(
+        SBT,
+        sbtContract.abi,
+        signer
+      );
+
+      const txn = await ethersRegistryContract.mint(account, tokenURI);
+      setTxnHash(txn);
+    }
+  }
 
   function handleUsernameChange(e) {
     e.preventDefault();
@@ -76,6 +104,7 @@ function Profile() {
     const { scores, givenReviews, receivedReviews } = data;
     setScores(scores);
     setGivenReviews(givenReviews);
+    console.log(givenReviews);
     setReceivedReviews(receivedReviews);
   }, [address]);
 
@@ -128,6 +157,8 @@ function Profile() {
 
   const profileName = name ? name : abridgeAddress(address as string);
 
+  const isProfileOwner = address === account;
+
   return (
     <main className={styles.main}>
       <ReviewModal
@@ -165,7 +196,7 @@ function Profile() {
                 ) : (
                   <Text className={styles.profileTitle}>{profileName}</Text>
                 )}
-                {address === account && (
+                {isProfileOwner && (
                   <Box pl=".5rem" onClick={handleEditNameMode}>
                     <IconButton
                       aria-label="Edit profile"
@@ -176,14 +207,25 @@ function Profile() {
               </HStack>
               <HStack>
                 <VStack>
-                  <HStack>
-                    <VStack opacity={0.4}>
-                      <FaFlag />
-                    </VStack>
-                    <Text className={styles.reviewsText}>
-                      Report this address
-                    </Text>
-                  </HStack>
+                  {isProfileOwner ? (
+                    <HStack>
+                      <Button onClick={mintSBT}>
+                        Mint Profile SBT{" "}
+                        <Box pl=".4rem">
+                          <FaStar />
+                        </Box>
+                      </Button>
+                    </HStack>
+                  ) : (
+                    <HStack>
+                      <VStack opacity={0.4}>
+                        <FaFlag />
+                      </VStack>
+                      <Text className={styles.reviewsText}>
+                        Report this address
+                      </Text>
+                    </HStack>
+                  )}
                   {flags && (
                     <Text className={styles.reviewsSubtext}>
                       Reported by {flags} users
