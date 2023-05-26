@@ -35,6 +35,9 @@ type Result = {
   trust: number;
 };
 
+const getRandomDate = (start: Date, end: Date) =>
+  new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+
 function mapReviews(reviews: Review[]): Result[] {
   const addresses = generateEthereumAddresses(reviews.length);
 
@@ -52,7 +55,9 @@ function mapReviews(reviews: Review[]): Result[] {
     reviewee: review.reviewee,
     transaction: null,
     trust: review.score,
-    createdAt: review.createdAt,
+    createdAt: getRandomDate(new Date("2023-05-02"), new Date("2023-05-13")),
+    likes: {},
+    comments: {},
   }));
 }
 
@@ -90,6 +95,7 @@ async function main() {
     //     { upsert: true }
     //   );
     // }
+
     const reviewsCollection = await client
       .db("trustsight")
       .collection("reviews");

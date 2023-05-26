@@ -108,7 +108,6 @@ function Profile() {
     const { scores, givenReviews, receivedReviews } = data;
     setScores(scores);
     setGivenReviews(givenReviews);
-    console.log(givenReviews);
     setReceivedReviews(receivedReviews);
   }, [address]);
 
@@ -126,6 +125,21 @@ function Profile() {
       console.log(e);
     }
   }, [account, fetchMetadata, newUsername]);
+
+  const handleFollow = useCallback(async () => {
+    try {
+      const response = await axios.post(`${TRUSTSIGHT_API_URL}/api/address`, {
+        address: account,
+        newFollow: address,
+      });
+
+      if (response.status === 200) {
+        await fetchMetadata();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [account, address, fetchMetadata]);
 
   useEffect(() => {
     setLoading(true);
@@ -157,11 +171,13 @@ function Profile() {
     description,
     subscores,
     flags,
+    followers,
   } = metadata;
 
   const profileName = name ? name : abridgeAddress(address as string);
 
   const isProfileOwner = address === account;
+  console.log(followers);
 
   return (
     <main className={styles.main}>
@@ -221,14 +237,25 @@ function Profile() {
                       </Button>
                     </HStack>
                   ) : (
-                    <HStack>
-                      <VStack opacity={0.4}>
-                        <FaFlag />
-                      </VStack>
-                      <Text className={styles.reviewsText}>
-                        Report this address
-                      </Text>
-                    </HStack>
+                    <VStack pt="2rem">
+                      {followers && followers[account] ? (
+                        <Button w="150px" isDisabled>
+                          Following
+                        </Button>
+                      ) : (
+                        <Button w="150px" onClick={handleFollow}>
+                          Follow
+                        </Button>
+                      )}
+                      <HStack cursor="pointer" className={styles.reportButton}>
+                        <VStack opacity={0.4}>
+                          <FaFlag />
+                        </VStack>
+                        <Text className={styles.reportText}>
+                          Report this address
+                        </Text>
+                      </HStack>
+                    </VStack>
                   )}
                   {flags && (
                     <Text className={styles.reviewsSubtext}>

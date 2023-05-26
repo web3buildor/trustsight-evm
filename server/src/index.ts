@@ -51,14 +51,19 @@ app.get("/api/address/:address", async (req: Request, res: Response) => {
         username: "",
         subtitle: "",
         image: "",
-        score: 0,
         address: address,
-        reviews: 0,
         category: "",
         createdAt: "",
         description: "",
         flags: 0,
+        followers: {},
+        following: {},
       };
+      await addressesCollection.updateOne(
+        { _id: address as any },
+        { $set: newMetadata },
+        { upsert: true }
+      );
       res.status(200).send(newMetadata);
     }
   } catch (error) {
@@ -101,7 +106,10 @@ app.get("/api/reviews", async (req: Request, res: Response) => {
       .db("trustsight")
       .collection("reviews");
 
-    const reviews = await reviewsCollection.find().toArray();
+    const reviews = await reviewsCollection
+      .find()
+      .sort({ createdAt: -1 })
+      .toArray();
 
     res.status(200).send(reviews);
   } catch (error) {
@@ -109,6 +117,45 @@ app.get("/api/reviews", async (req: Request, res: Response) => {
     res.status(500).send("An error occurred");
   }
 });
+
+app.get(
+  "/api/reviews/following/:address",
+  async (req: Request, res: Response) => {
+    const { address } = req.params;
+
+    console.log(address);
+    try {
+      await client.connect();
+
+      const addressesCollection = await client
+        .db("trustsight")
+        .collection("addresses");
+
+      const metadata = await addressesCollection.findOne({ address });
+
+      // array of addresses the addresss is following
+      const following = metadata ? Object.keys(metadata.following) : [];
+
+      const reviewsCollection = await client
+        .db("trustsight")
+        .collection("reviews");
+
+      const reviewsAboutFollowing = await reviewsCollection
+        .find({
+          $or: [
+            { reviewee: { $in: following } },
+            { reviewer: { $in: following } },
+          ],
+        })
+        .toArray();
+
+      res.status(200).send(reviewsAboutFollowing);
+    } catch (error) {
+      console.error("Error while fetching reviews:", error);
+      res.status(500).send("An error occurred");
+    }
+  }
+);
 
 app.get("/api/reviews/:address", async (req: Request, res: Response) => {
   const { address } = req.params;
@@ -135,7 +182,6 @@ app.get("/api/reviews/:address", async (req: Request, res: Response) => {
 
     const average = computeAverage(receivedReviews);
 
-    console.log(givenReviews);
     res.status(200).send({
       scores: average,
       givenReviews,
@@ -143,6 +189,46 @@ app.get("/api/reviews/:address", async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error while fetching reviews:", error);
+    res.status(500).send("An error occurred");
+  }
+});
+
+app.put("/api/reviews", async (req: Request, res: Response) => {
+  const { _id, likes, newLike, newComment } = req.body;
+  try {
+    await client.connect();
+
+    const reviewsCollection = await client
+      .db("trustsight")
+      .collection("reviews");
+
+    if (newLike) {
+      await reviewsCollection.updateOne(
+        { _id: _id as any },
+        {
+          $set: {
+            likes: { [newLike]: true },
+          },
+        },
+        { upsert: true }
+      );
+    }
+
+    if (newComment) {
+      await reviewsCollection.updateOne(
+        { _id: _id as any },
+        {
+          $set: {
+            comments: { [newComment.commenter]: newComment },
+          },
+        },
+        { upsert: true }
+      );
+    }
+
+    res.status(200).send();
+  } catch (error) {
+    console.error("Error while caching review:", error);
     res.status(500).send("An error occurred");
   }
 });
@@ -222,7 +308,7 @@ app.post("/api/reviews", async (req: Request, res: Response) => {
 });
 
 app.post("/api/address", async (req: Request, res: Response) => {
-  const { address, username, image } = req.body;
+  const { address, username, image, newFollow } = req.body;
 
   try {
     await client.connect();
@@ -251,6 +337,27 @@ app.post("/api/address", async (req: Request, res: Response) => {
           $set: {
             address,
             image,
+          },
+        },
+        { upsert: true }
+      );
+    }
+
+    if (newFollow) {
+      await addressesCollection.updateOne(
+        { _id: address as any },
+        {
+          $set: {
+            [`following.${newFollow}`]: true,
+          },
+        },
+        { upsert: true }
+      );
+      await addressesCollection.updateOne(
+        { _id: newFollow as any },
+        {
+          $set: {
+            [`followers.${address}`]: true,
           },
         },
         { upsert: true }

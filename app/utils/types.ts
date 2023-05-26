@@ -14,4 +14,6 @@ export type Metadata = {
   governance: number;
   innovative: number;
   flags: number;
+  followers: any;
+  following: any;
 };
