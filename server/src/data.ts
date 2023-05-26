@@ -52,6 +52,12 @@ export const addresses: { [key: string]: any } = {
     followers: {},
     following: {},
   },
+  "0xd621e901f67c67209b5bd55f37f4e69c213fe4ad": {
+    address: "0xd621e901f67c67209b5bd55f37f4e69c213fe4ad",
+    flags: 3,
+    followers: {},
+    following: {},
+  },
 };
 
 export const projects = [
@@ -146,6 +152,29 @@ export const projects = [
 ];
 
 export const reviews = [
+  {
+    reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
+    reviewee: "0xd621e901f67c67209b5bd55f37f4e69c213fe4ad",
+    score: 0,
+    review:
+      "BEWARE fellow evmosians! this guy asked me to mint his project and i got scammed my favorite NFTs. DON'T approve the transaction",
+    createdAt: "2023-05-12 07:11:34",
+  },
+  {
+    reviewer: "0xCBD6832Ebc203e49E2B771897067fce3c58575ac",
+    reviewee: "0xd621e901f67c67209b5bd55f37f4e69c213fe4ad",
+    score: 0,
+    review: "give me my NFTs back you scammer.",
+    createdAt: "2023-05-11 23:19:36",
+  },
+  {
+    reviewer: "0xa57Bd00134B2850B2a1c55860c9e9ea100fDd6CF",
+    reviewee: "0xd621e901f67c67209b5bd55f37f4e69c213fe4ad",
+    score: 0,
+    review:
+      "STAY AWAY FROM THIS SCAMMER ADDRESS. They have it hooked up to a setApprovalForAll with your most expensive NFT collection using Seaport.",
+    createdAt: "2023-05-06 02:55:53",
+  },
   {
     reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
     reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
@@ -283,7 +312,7 @@ export const reviews = [
   },
   {
     reviewer: "0x5Dfd095B154137B31D54712d1695E55a55001cd0",
-    reviewee: "0x99cd71A9Be225D107c0945e2688FD933310f3e86",
+    reviewee: "0x27e4522f2b99d516E0adAd1162E111CAEccD05Fa",
     score: 5,
     review:
       "this one is a real degen. would recommend follow his trades on nansen.",
@@ -291,7 +320,7 @@ export const reviews = [
   },
   {
     reviewer: "0x076baaAf9d8bE48aA991d7F0644B907F5C807416",
-    reviewee: "0x99cd71A9Be225D107c0945e2688FD933310f3e86",
+    reviewee: "0x27e4522f2b99d516E0adAd1162E111CAEccD05Fa",
     score: 5,
     review:
       "address has some really cool NFT's. leaving this review so i can remember to come back to it",

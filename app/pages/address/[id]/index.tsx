@@ -34,7 +34,7 @@ type Scores = {
   [key: string]: number;
 };
 
-const SBT = "0x718F299076eC91cF070Df6467c327f5b49d613c9";
+const SBT = "0xc530ea65d19fcf09a1fb9aedc820e06fb38f35a0";
 
 function Profile() {
   const { isOpen, onOpen, onClose } = useDisclosure();
