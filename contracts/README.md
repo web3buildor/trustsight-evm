@@ -1,6 +1,6 @@
 # TrustScoreRegistry
 
-This is a solidity smart contract for the Binance Smart Chain , which maintains a registry of trust scores. Each user (identified by their Binance Smart Chain address) can submit a review for another user, which is then stored on the blockchain.
+This is a solidity smart contract for the Evmos Blockchain , which maintains a registry of trust scores. Each user (identified by their Evmos Blockchain address) can submit a review for another user, which is then stored on the blockchain.
 
 ## Contract Details
 
