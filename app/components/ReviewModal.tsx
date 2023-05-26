@@ -24,6 +24,7 @@ import {
   abridgeAddress,
   capitalizeFirstLetter,
   encodeRawKey,
+  TRUSTSIGHT_API_URL,
 } from "@utils/utils";
 import { useContractWrite, usePrepareContractWrite, useSigner } from "wagmi";
 import registryContract from "@data/abi.json";
@@ -89,7 +90,7 @@ function ReviewModal({
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/reviews", {
+      const response = await axios.post(`${TRUSTSIGHT_API_URL}/api/reviews`, {
         review: cachedReview,
       });
 

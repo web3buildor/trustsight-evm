@@ -5,6 +5,7 @@ import Jdenticon from "react-jdenticon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import axios from "axios";
 import { Web3Storage } from "web3.storage";
+import { TRUSTSIGHT_API_URL } from "@utils/utils";
 
 const WEB3_STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY;
 
@@ -43,7 +44,7 @@ function ProfileSection({
     const imageCID = await client.put(imageToUpload);
     const imageLink = `https://${imageCID}.ipfs.w3s.link/image.png`;
 
-    const response = await axios.post(`http://localhost:8000/api/address`, {
+    const response = await axios.post(`${TRUSTSIGHT_API_URL}/api/address`, {
       address: account,
       image: imageLink,
     });

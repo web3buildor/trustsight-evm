@@ -2,7 +2,7 @@ import { HStack, VStack, Text, Image, Box, SimpleGrid } from "@chakra-ui/react";
 import withTransition from "@components/withTransition";
 import { categories, defiProjects } from "@data/data";
 import styles from "@styles/Home.module.css";
-import { abridgeAddress } from "@utils/utils";
+import { abridgeAddress, TRUSTSIGHT_API_URL } from "@utils/utils";
 import { useCallback, useEffect, useState } from "react";
 
 function Explore() {
@@ -13,7 +13,7 @@ function Explore() {
   const fetchDapps = useCallback(async () => {
     if (!selectedCategory) return;
     const res = await fetch(
-      `http://localhost:8000/api/projects/${selectedCategory}`
+      `${TRUSTSIGHT_API_URL}/api/projects/${selectedCategory}`
     );
     const data = await res.json();
     setDapps(data);

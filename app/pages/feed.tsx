@@ -10,7 +10,7 @@ import {
 import withTransition from "@components/withTransition";
 import { featuredProjects } from "@data/data";
 import styles from "@styles/Home.module.css";
-import { abridgeAddress } from "@utils/utils";
+import { abridgeAddress, TRUSTSIGHT_API_URL } from "@utils/utils";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import Jdenticon from "react-jdenticon";
@@ -23,7 +23,7 @@ function Feed() {
   const [loadMoreCount, setLoadMoreCount] = useState(1);
 
   const fetchReviews = useCallback(async () => {
-    const res = await fetch(`http://localhost:8000/api/reviews`);
+    const res = await fetch(`${TRUSTSIGHT_API_URL}/api/reviews`);
     const data = await res.json();
     setReviews(data);
     setRenderedReviews(data.slice(0, 10));

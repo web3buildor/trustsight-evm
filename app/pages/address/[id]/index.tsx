@@ -11,7 +11,11 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { abridgeAddress, capitalizeFirstLetter } from "@utils/utils";
+import {
+  abridgeAddress,
+  capitalizeFirstLetter,
+  TRUSTSIGHT_API_URL,
+} from "@utils/utils";
 import { FaCheck, FaFlag, FaPen, FaStar } from "react-icons/fa";
 import { useAccount, useSigner } from "wagmi";
 import { useCallback, useEffect, useState } from "react";
@@ -52,7 +56,7 @@ function Profile() {
   const { id: address } = router.query;
 
   async function fetchTokenURI() {
-    const res = await fetch(`http://localhost:8000/api/sbt/${address}`);
+    const res = await fetch(`${TRUSTSIGHT_API_URL}/api/sbt/${address}`);
     const { tokenURI } = await res.json();
     return tokenURI;
   }
@@ -89,7 +93,7 @@ function Profile() {
   const fetchMetadata = useCallback(async () => {
     if (!address) return;
 
-    const res = await fetch(`http://localhost:8000/api/address/${address}`);
+    const res = await fetch(`${TRUSTSIGHT_API_URL}/api/address/${address}`);
     const data = await res.json();
     setMetadata(data);
     setUsername(data.username);
@@ -99,7 +103,7 @@ function Profile() {
   const fetchReviews = useCallback(async () => {
     if (!address) return;
 
-    const res = await fetch(`http://localhost:8000/api/reviews/${address}`);
+    const res = await fetch(`${TRUSTSIGHT_API_URL}/api/reviews/${address}`);
     const data = await res.json();
     const { scores, givenReviews, receivedReviews } = data;
     setScores(scores);
@@ -110,7 +114,7 @@ function Profile() {
 
   const updateUsername = useCallback(async () => {
     try {
-      const response = await axios.post(`http://localhost:8000/api/address`, {
+      const response = await axios.post(`${TRUSTSIGHT_API_URL}/api/address`, {
         address: account,
         username: newUsername,
       });
