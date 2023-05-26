@@ -108,7 +108,7 @@ async function main() {
 
   const trustKey = encodeRawKey(`trustsight.trust`);
 
-  const trustEvent = trustScoreRegistry.filters.AttestationCreated(
+  const trustEvent = trustScoreRegistry.filters.ReviewCreated(
     null,
     null,
     trustKey

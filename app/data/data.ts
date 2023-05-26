@@ -254,7 +254,7 @@ export const mockAddresses = {
     reviews: 29,
     category: "DeFi",
     description:
-      "PancakeSwap Finance, at its core, is a solution for protocols on Optimism to properly incentivize liquidity for their own use cases. Building on top of the groundwork laid out by Solidly, our team has addressed that first iteration's core issues to realize its full potential.",
+      "PancakeSwap Finance, at its core, is a solution for protocols on BSC to properly incentivize liquidity for their own use cases. Building on top of the groundwork laid out by Solidly, our team has addressed that first iteration's core issues to realize its full potential.",
     createdAt: 1652940000000,
     subscores: ["tokenomics", "liquidity", "governance", "innovative"],
     tokenomics: 4.9,

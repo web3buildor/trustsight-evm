@@ -4,9 +4,9 @@ This project is a trust scoring system, built on top of Binance Smart Chain bloc
 
 ## Usage
 
-The `main()` function is the entry point of the script. It starts by attaching to the `TrustScoreRegistry` contract on the Binance Smart Chain network. It then encodes a trust key and sets up a filter to listen for `AttestationCreated` events related to that key.
+The `main()` function is the entry point of the script. It starts by attaching to the `TrustScoreRegistry` contract on the Binance Smart Chain network. It then encodes a trust key and sets up a filter to listen for `ReviewCreated` events related to that key.
 
-The `TrustScoreRegistry` contract is queried for `AttestationCreated` events. For each event, the creator and recipient are extracted and a trust relationship is added to the pool. The initial trust scores for each recipient are also set.
+The `TrustScoreRegistry` contract is queried for `ReviewCreated` events. For each event, the creator and recipient are extracted and a trust relationship is added to the pool. The initial trust scores for each recipient are also set.
 
 After all events are processed, the trust scores are computed using the Eigentrust algorithm. Each trust score is then updated on the `TrustScoreRegistry` contract.
 
