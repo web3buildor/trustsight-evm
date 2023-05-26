@@ -133,7 +133,7 @@ function Profile() {
     fetchReviews();
 
     return () => clearTimeout(timer);
-  }, [address]);
+  }, [address, fetchMetadata, fetchReviews]);
 
   if (!metadata || !scores || isLoading)
     return (

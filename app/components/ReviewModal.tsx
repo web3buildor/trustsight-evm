@@ -25,12 +25,7 @@ import {
   capitalizeFirstLetter,
   encodeRawKey,
 } from "@utils/utils";
-import {
-  useContractWrite,
-  usePrepareContractWrite,
-  useProvider,
-  useSigner,
-} from "wagmi";
+import { useContractWrite, usePrepareContractWrite, useSigner } from "wagmi";
 import registryContract from "@data/abi.json";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
@@ -224,7 +219,7 @@ function ReviewModal({
       reviewDeepCopy[subscore] = review;
     });
     setReviewMap(reviewDeepCopy);
-  }, [address, subscores]);
+  }, [address, category, reviewMap, subscores]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>

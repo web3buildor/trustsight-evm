@@ -4,12 +4,11 @@ import {
   Text,
   Image,
   Box,
-  SimpleGrid,
   Spinner,
   Button,
 } from "@chakra-ui/react";
 import withTransition from "@components/withTransition";
-import { categories, defiProjects, featuredProjects } from "@data/data";
+import { featuredProjects } from "@data/data";
 import styles from "@styles/Home.module.css";
 import { abridgeAddress } from "@utils/utils";
 import { useRouter } from "next/router";
@@ -192,8 +191,8 @@ function Row({ index, style, data }) {
           onClick={() => router.push(`/address/${reviewer}`)}
           cursor="pointer"
         >
-          <Identicon
-            string={reviewer as string}
+          <Jdenticon
+            value={reviewer as string}
             className={styles.reviewImage}
           />
           <Text className={styles.reviewReviewer}>
