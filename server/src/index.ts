@@ -3,7 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import express, { Request, Response, Express } from "express";
 import { MongoClient, ServerApiVersion } from "mongodb";
-import { addresses, projects } from "./data";
+import { projects } from "./data";
 import { fetchSBTTokenURI } from "./tokenURI";
 
 dotenv.config();
@@ -71,7 +71,7 @@ type Review = Record<string, any>;
 
 function computeAverage(reviews: Review[]): Review {
   if (reviews.length === 0) {
-    return {};
+    return { trust: 0 };
   }
 
   const total = reviews.reduce((acc, curr) => {
@@ -107,8 +107,6 @@ app.get("/api/reviews", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error while fetching reviews:", error);
     res.status(500).send("An error occurred");
-  } finally {
-    await client.close();
   }
 });
 
@@ -128,11 +126,16 @@ app.get("/api/reviews/:address", async (req: Request, res: Response) => {
       })
       .toArray();
 
-    const givenReviews = reviews.filter((r) => r.reviewer === address);
-    const receivedReviews = reviews.filter((r) => r.reviewee === address);
+    const givenReviews = reviews.filter(
+      (r) => r.reviewer.toLocaleLowerCase() === address.toLocaleLowerCase()
+    );
+    const receivedReviews = reviews.filter(
+      (r) => r.reviewee.toLocaleLowerCase() === address.toLocaleLowerCase()
+    );
 
     const average = computeAverage(receivedReviews);
 
+    console.log(givenReviews);
     res.status(200).send({
       scores: average,
       givenReviews,
@@ -141,8 +144,6 @@ app.get("/api/reviews/:address", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error while fetching reviews:", error);
     res.status(500).send("An error occurred");
-  } finally {
-    await client.close();
   }
 });
 
@@ -164,9 +165,15 @@ app.get("/api/sbt/:address", async (req: Request, res: Response) => {
   try {
     await client.connect();
 
+    const addressesCollection = await client
+      .db("trustsight")
+      .collection("addresses");
+
     const reviewsCollection = await client
       .db("trustsight")
       .collection("reviews");
+
+    const metadata = await addressesCollection.findOne({ address });
 
     const reviews = await reviewsCollection
       .find({ reviewee: address })
@@ -176,7 +183,14 @@ app.get("/api/sbt/:address", async (req: Request, res: Response) => {
     const score = average.trust;
     const numReviews = reviews.length;
 
-    const tokenURI = await fetchSBTTokenURI(address, score, numReviews);
+    const tokenURI = await fetchSBTTokenURI(
+      address,
+      metadata ? metadata.username : null,
+      metadata ? metadata.image : null,
+      score,
+      numReviews
+    );
+
     res.status(200).send({ tokenURI });
   } catch (error) {
     console.error("Error while processing request:", error);
@@ -204,8 +218,6 @@ app.post("/api/reviews", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error while caching review:", error);
     res.status(500).send("An error occurred");
-  } finally {
-    await client.close();
   }
 });
 
@@ -249,8 +261,6 @@ app.post("/api/address", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error while caching review:", error);
     res.status(500).send("An error occurred");
-  } finally {
-    await client.close();
   }
 });
 

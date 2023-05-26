@@ -45,7 +45,10 @@ function mapReviews(reviews: Review[]): Result[] {
     innovative: getRandomFourOrFive(),
     liquidity: getRandomFourOrFive(),
     tokenomics: getRandomFourOrFive(),
-    reviewer: addresses[idx],
+    reviewer:
+      review.reviewer != "0x078F651c82da4800d654351bBE07d4B535B21DfA"
+        ? addresses[idx]
+        : review.reviewer,
     reviewee: review.reviewee,
     transaction: null,
     trust: review.score,
@@ -74,32 +77,32 @@ async function main() {
   try {
     await client.connect();
 
-    const addressesCollection = await client
-      .db("trustsight")
-      .collection("addresses");
-
-    const addressKeys = Object.keys(addresses);
-
-    for (let i = 0; i < addressKeys.length; i++) {
-      await addressesCollection.updateOne(
-        { _id: addressKeys[i] as any },
-        { $set: addresses[addressKeys[i]] },
-        { upsert: true }
-      );
-    }
-    // const reviewsCollection = await client
+    // const addressesCollection = await client
     //   .db("trustsight")
-    //   .collection("reviews");
+    //   .collection("addresses");
 
-    // const result = mapReviews(reviews);
+    // const addressKeys = Object.keys(addresses);
 
-    // for (let i = 0; i < result.length; i++) {
-    //   await reviewsCollection.updateOne(
-    //     { _id: result[i]._id as any },
-    //     { $set: result[i] },
+    // for (let i = 0; i < addressKeys.length; i++) {
+    //   await addressesCollection.updateOne(
+    //     { _id: addressKeys[i] as any },
+    //     { $set: addresses[addressKeys[i]] },
     //     { upsert: true }
     //   );
     // }
+    const reviewsCollection = await client
+      .db("trustsight")
+      .collection("reviews");
+
+    const result = mapReviews(reviews);
+
+    for (let i = 0; i < result.length; i++) {
+      await reviewsCollection.updateOne(
+        { _id: result[i]._id as any },
+        { $set: result[i] },
+        { upsert: true }
+      );
+    }
   } catch (err) {
     console.log(err);
   }

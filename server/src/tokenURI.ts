@@ -22,6 +22,8 @@ function abridgeAddress(address: string) {
 
 export async function fetchSBTTokenURI(
   address: string,
+  username: string,
+  imageURL: string,
   score: number,
   numReviews: number
 ) {
@@ -36,10 +38,19 @@ export async function fetchSBTTokenURI(
   // draw background gradient
   roundRect(context, 0, 0, 660, 660, 20, gradient);
 
-  // draw identicon
-  const png: Buffer = jdenticon.toPng(address, 190);
-  const identicon = await loadImage(png);
-  context.drawImage(identicon, 30, 30, 260, 260);
+  // draw profile or identicon
+  if (imageURL) {
+    roundRect(context, 30, 30, 250, 250, 20);
+    context.save();
+    context.clip();
+    const identicon = await loadImage(imageURL);
+    context.drawImage(identicon, 30, 30, 250, 250);
+    context.restore();
+  } else {
+    const png: Buffer = jdenticon.toPng(address, 190);
+    const identicon = await loadImage(png);
+    context.drawImage(identicon, 30, 30, 260, 260);
+  }
 
   // draw footer logo
   const logo = await loadImage("./src/logo2.png");
@@ -54,28 +65,34 @@ export async function fetchSBTTokenURI(
   context.textBaseline = "top";
   context.fillStyle = "#000000";
   context.font = `bold 74px Helvetica Neue`;
-  context.fillText(abridgeAddress(address), 50, 290);
+  context.fillText(username ?? abridgeAddress(address), 50, 290);
+
+  // draw address
+  context.textBaseline = "top";
+  context.fillStyle = "#7B7B7B";
+  context.font = `bold 46px Helvetica Neue`;
+  context.fillText(abridgeAddress(address), 50, 385);
 
   // draw score
   context.textBaseline = "top";
-  context.fillStyle = "#00000";
+  context.fillStyle = "#000000";
   context.font = `bold 36px Helvetica Neue`;
-  context.fillText(score.toFixed(2), 340, 392);
+  context.fillText(score.toFixed(2), 340, 452);
 
   // draw score
   context.textBaseline = "top";
   context.fillStyle = "#7B7B7B";
   context.font = `bold 30px Helvetica Neue`;
-  context.fillText(`· ${numReviews} reviews`, 420, 395);
+  context.fillText(`· ${numReviews} reviews`, 420, 455);
 
   // draw star
   const star = await loadImage("./src/star.png");
   const greystar = await loadImage("./src/greystar.png");
   for (let i = 0; i < 5; i++) {
     if (i < Math.round(score)) {
-      context.drawImage(star, 50 + i * 55, 390, 50, 50);
+      context.drawImage(star, 50 + i * 55, 450, 50, 50);
     } else {
-      context.drawImage(greystar, 50 + i * 55, 390, 50, 50);
+      context.drawImage(greystar, 50 + i * 55, 450, 50, 50);
     }
   }
 
@@ -113,6 +130,17 @@ export async function fetchSBTTokenURI(
   return jsonLink;
 }
 
+// fetchSBTTokenURI(
+//   "0x078F651c82da4800d654351bBE07d4B535B21DfA",
+//   "this is my name",
+//   "https://bafybeif4w4kyhf622cf34efk5tks3rqpdsogptj4lbzn3j6k72e3xwimmm.ipfs.w3s.link/image.png",
+//   4.2819,
+//   28
+// ).catch((error) => {
+//   console.error(error);
+//   process.exitCode = 1;
+// });
+
 // helper function to draw rounded rectangles
 function roundRect(
   ctx: any,
@@ -121,7 +149,7 @@ function roundRect(
   width: any,
   height: any,
   radius: any,
-  fillColor: any,
+  fillColor?: any,
   strokeColor?: any
 ) {
   let radiusObj: any = {};
