@@ -25,14 +25,23 @@ contract TrustSightSBT is ERC721, Ownable {
     }
 
     function mint(address to, string memory _tokenURI) public {
-        uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
+        uint256 tokenId = _tokenIdCounter.current();
         tokenIdToURI[tokenId] = _tokenURI;
         _safeMint(to, tokenId);
     }
 
     function _burn(uint256 tokenId) internal override(ERC721) {
         super._burn(tokenId);
+    }
+
+    function setTokenURI(
+        uint256 _tokenId,
+        string memory _tokenURI
+    ) public onlyOwner {
+        require(_exists(_tokenId), "Non-existent token");
+
+        tokenIdToURI[_tokenId] = _tokenURI;
     }
 
     function tokenURI(
