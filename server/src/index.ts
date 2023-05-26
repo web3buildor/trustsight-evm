@@ -14,8 +14,6 @@ if (!process.env.PORT) {
 
 const app: Express = express();
 const port = process.env.PORT ?? 8888;
-const MONGO_USER = process.env.MONGO_USER ?? "";
-const MONGO_PW = process.env.MONGO_PW ?? "";
 
 dotenv.config();
 
@@ -23,7 +21,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${MONGO_USER}:${MONGO_PW}@cluster0.hsk5jk6.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.MONGO_URL ?? "";
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -40,7 +38,7 @@ app.get("/api/address/:address", async (req: Request, res: Response) => {
     await client.connect();
 
     const addressesCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("addresses");
 
     const metadata = await addressesCollection.findOne({ address });
@@ -103,7 +101,7 @@ app.get("/api/reviews", async (req: Request, res: Response) => {
     await client.connect();
 
     const reviewsCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("reviews");
 
     const reviews = await reviewsCollection
@@ -128,7 +126,7 @@ app.get(
       await client.connect();
 
       const addressesCollection = await client
-        .db("trustsight")
+        .db("trustsight-evmos")
         .collection("addresses");
 
       const metadata = await addressesCollection.findOne({ address });
@@ -137,7 +135,7 @@ app.get(
       const following = metadata ? Object.keys(metadata.following) : [];
 
       const reviewsCollection = await client
-        .db("trustsight")
+        .db("trustsight-evmos")
         .collection("reviews");
 
       const reviewsAboutFollowing = await reviewsCollection
@@ -164,7 +162,7 @@ app.get("/api/reviews/:address", async (req: Request, res: Response) => {
     await client.connect();
 
     const reviewsCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("reviews");
 
     const reviews = await reviewsCollection
@@ -199,7 +197,7 @@ app.put("/api/reviews", async (req: Request, res: Response) => {
     await client.connect();
 
     const reviewsCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("reviews");
 
     if (newLike) {
@@ -252,11 +250,11 @@ app.get("/api/sbt/:address", async (req: Request, res: Response) => {
     await client.connect();
 
     const addressesCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("addresses");
 
     const reviewsCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("reviews");
 
     const metadata = await addressesCollection.findOne({ address });
@@ -291,7 +289,7 @@ app.post("/api/reviews", async (req: Request, res: Response) => {
     await client.connect();
 
     const reviewsCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("reviews");
 
     await reviewsCollection.updateOne(
@@ -314,7 +312,7 @@ app.post("/api/address", async (req: Request, res: Response) => {
     await client.connect();
 
     const addressesCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("addresses");
 
     if (username) {

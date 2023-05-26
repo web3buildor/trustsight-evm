@@ -14,17 +14,17 @@ export const categories = [
 
 // TODO: update metadata for accuracy
 export const featuredProjects = {
-  "0x10ed43c718714eb63d5aa57b78b54704e256024e": {
-    title: "PancakeSwap",
+  "0x5b5e44da9718288244110e66a7cA6C537f36f948": {
+    title: "Forge",
     subtitle: "Router v2",
-    image: "/pancake.png",
+    image: "/defi/forge.png",
     score: 4.86,
-    address: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    address: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     reviews: 29,
     category: "DeFi",
     createdAt: "2021-12-13 01:49:21",
     description:
-      "PancakeSwap is the leading decentralized exchange on BNB Smart Chain, with the highest trading volumes in the market.",
+      "Forge is the leading decentralized exchange on BNB Smart Chain, with the highest trading volumes in the market.",
     subscores: ["tokenomics", "liquidity", "governance", "innovative"],
     tokenomics: 4.3,
     liquidity: 4.7,
@@ -32,59 +32,59 @@ export const featuredProjects = {
     innovative: 4.4,
     flags: 0,
   },
-  "0x1111111254fb6c44bAC0beD2854e76F90643097d": {
-    title: "1inch Network",
-    image: "/1inch.png",
+  "0x525e3011F77019595BfB954a11876C02c0929b10": {
+    title: "SpaceFi",
+    image: "/defi/spacefi.png",
     score: 4.96,
-    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    address: "0x525e3011F77019595BfB954a11876C02c0929b10",
     reviews: 29,
   },
-  "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8": {
-    title: "Stargate Finance",
-    image: "/stargate.jpg",
+  "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB": {
+    title: "Evmoswap",
+    image: "/defi/evmoswap.png",
     score: 4.82,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 2048,
   },
-  "0xD1ca1F4dBB645710f5D5a9917AA984a47524f49A": {
-    title: "Bitkeep Swap",
-    image: "/bitkeep.png",
+  "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F": {
+    title: "Diffusion Finance",
+    image: "/defi/diffusion.jpg",
     score: 4.92,
-    address: "0xD1ca1F4dBB645710f5D5a9917AA984a47524f49A",
+    address: "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F",
     reviews: 192,
   },
 };
 
 export const projects = [
   {
-    title: "PancakeSwap",
-    image: "/defi/pancake.png",
+    title: "Forge",
+    image: "/defi/forge.png",
     score: 4.82,
-    address: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    address: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     reviews: 17,
     category: "defi",
   },
   {
-    title: "1inch Network",
-    image: "/defi/1inch.png",
+    title: "SpaceFi",
+    image: "/defi/spacefi.png",
     score: 4.92,
-    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    address: "0x525e3011F77019595BfB954a11876C02c0929b10",
     reviews: 29,
     category: "defi",
   },
   {
-    title: "Bitkeep Swap",
-    image: "/defi/bitkeep.png",
+    title: "Diffusion Finance",
+    image: "/defi/diffusion.jpg",
     score: 4.79,
-    address: "0xD1ca1F4dBB645710f5D5a9917AA984a47524f49A",
+    address: "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F",
     reviews: 9,
     category: "defi",
   },
   {
-    title: "Stargate Finance",
-    image: "/defi/stargate.jpg",
+    title: "Evmoswap",
+    image: "/defi/evmoswap.png",
     score: 4.83,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 21,
     category: "defi",
   },
@@ -92,7 +92,7 @@ export const projects = [
     title: "Apeswap",
     image: "/defi/apeswap.png",
     score: 4.82,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 2048,
     category: "defi",
   },
@@ -101,7 +101,7 @@ export const projects = [
     title: "Autoshark Finance",
     image: "/defi/autoshark.png",
     score: 4.96,
-    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    address: "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F",
     reviews: 29,
     category: "defi",
   },
@@ -109,7 +109,7 @@ export const projects = [
     title: "Biswap",
     image: "/defi/biswap.png",
     score: 4.82,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 2048,
     category: "defi",
   },
@@ -118,7 +118,7 @@ export const projects = [
     title: "Bungee",
     image: "/defi/bungee.png",
     score: 4.82,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 2048,
     category: "defi",
   },
@@ -126,38 +126,38 @@ export const projects = [
     title: "DexView",
     image: "/defi/dexview.png",
     score: 4.96,
-    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    address: "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F",
     reviews: 29,
     category: "defi",
   },
   {
-    title: "Opensea",
-    image: "/nft/opensea.png",
+    title: "Orbit Marketplace",
+    image: "/nft/orbit.jpg",
     score: 4.78,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 48,
     category: "nft",
   },
   {
-    title: "Element Market",
-    image: "/nft/element.jpg",
+    title: "Evmos Domains",
+    image: "/nft/evmosdomains.jpg",
     score: 4.73,
     address: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
     reviews: 8,
     category: "nft",
   },
   {
-    title: "Galxe",
-    image: "/nft/galxe.jpg",
-    score: 4.81,
+    title: "Evmosians",
+    image: "/nft/evmosians.png",
+    score: 4.79,
     address: "0x9507c04B10486547584C37bCBd931B2a4FeE9A41",
     reviews: 37,
     category: "nft",
   },
   {
-    title: "NFTKEY Market",
-    image: "/nft/nftkey.png",
-    score: 4.79,
+    title: "Orbital Apes",
+    image: "/nft/orbital.png",
+    score: 4.81,
     address: "0xCBD6832Ebc203e49E2B771897067fce3c58575ac",
     reviews: 19,
     category: "nft",
@@ -166,7 +166,7 @@ export const projects = [
     title: "NFTb",
     image: "/nft/nftb.png",
     score: 4.82,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 2048,
     category: "nft",
   },
@@ -174,7 +174,7 @@ export const projects = [
     title: "Rareboard",
     image: "/nft/rareboard.jpg",
     score: 4.96,
-    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    address: "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F",
     reviews: 29,
     category: "nft",
   },
@@ -182,15 +182,15 @@ export const projects = [
     title: "VIMWorld",
     image: "/nft/vimworld.jpg",
     score: 4.82,
-    address: "0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8",
+    address: "0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB",
     reviews: 2048,
     category: "nft",
   },
   {
-    title: "Bitkeep NFT Market",
-    image: "/nft/bitkeep.png",
+    title: "Diffusion NFT Market",
+    image: "/nft/diffusion.jpg",
     score: 4.96,
-    address: "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+    address: "0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F",
     reviews: 29,
     category: "nft",
   },
@@ -202,25 +202,25 @@ export const featuredReviews = [
     stars: 5,
     reviewer: "TechieTornado",
     recipient:
-      featuredProjects["0x10ed43c718714eb63d5aa57b78b54704e256024e"].title,
+      featuredProjects["0x5b5e44da9718288244110e66a7cA6C537f36f948"].title,
     review:
-      "PancakeSwap is the best decentralized exchange app I have ever used! It's fast, secure, and easy to use.",
+      "Forge is the best decentralized exchange app I have ever used! It's fast, secure, and easy to use.",
   },
   {
     image: "/2.png",
     stars: 5,
     reviewer: "0xMarmalade",
     recipient:
-      featuredProjects["0x1111111254fb6c44bAC0beD2854e76F90643097d"].title,
+      featuredProjects["0xFCd2Ce20ef8ed3D43Ab4f8C2dA13bbF1C6d9512F"].title,
     review:
-      "I love 1inch! It's so easy to use and has a great interface. I can trade my favorite cryptocurrencies with ease.",
+      "I love SpaceFi! It's so easy to use and has a great interface. I can trade my favorite cryptocurrencies with ease.",
   },
   {
     image: "/3.png",
     stars: 5,
     reviewer: "DigitalGuru21",
     recipient:
-      featuredProjects["0x10ed43c718714eb63d5aa57b78b54704e256024e"].title,
+      featuredProjects["0x5b5e44da9718288244110e66a7cA6C537f36f948"].title,
     review:
       "I've been using it for a few weeks now and I'm so impressed with how easy it is to use. It's perfect for beginners like me.",
   },
@@ -229,16 +229,16 @@ export const featuredReviews = [
     stars: 5,
     reviewer: "degen-kungfu",
     recipient:
-      featuredProjects["0x4a364f8c717cAAD9A442737Eb7b8A55cc6cf18D8"].title,
+      featuredProjects["0x64C3b10636baBb3Ef46a7E2E5248b0dE43198fCB"].title,
     review:
-      "The Stargate Finance app is fantastic! It's easy to navigate and makes trading cryptocurrencies a breeze. Highly recommended!",
+      "The Evmoswap app is fantastic! It's easy to navigate and makes trading cryptocurrencies a breeze. Highly recommended!",
   },
 ];
 
 export const defiProjects = [
   {
-    title: "PancakeSwap",
-    image: "/PancakeSwap.png",
+    title: "Forge",
+    image: "/defi/forge.png",
     score: 4.86,
     address: "0xFeebabE6b0418eC13b30aAdF129F5DcDd4f70CeA",
     reviews: 29,
@@ -247,14 +247,14 @@ export const defiProjects = [
 
 export const mockAddresses = {
   "0x9c12939390052919aF3155f41Bf4160Fd3666A6f": {
-    title: "PancakeSwap",
-    image: "/PancakeSwap.png",
+    title: "Forge",
+    image: "/defi/forge.png",
     score: 4.22,
     address: "0x9c12939390052919aF3155f41Bf4160Fd3666A6f",
     reviews: 29,
     category: "DeFi",
     description:
-      "PancakeSwap Finance, at its core, is a solution for protocols on BSC to properly incentivize liquidity for their own use cases. Building on top of the groundwork laid out by Solidly, our team has addressed that first iteration's core issues to realize its full potential.",
+      "Forge Finance, at its core, is a solution for protocols on EVMOS to properly incentivize liquidity for their own use cases. Building on top of the groundwork laid out by Solidly, our team has addressed that first iteration's core issues to realize its full potential.",
     createdAt: 1652940000000,
     subscores: ["tokenomics", "liquidity", "governance", "innovative"],
     tokenomics: 4.9,
@@ -287,14 +287,14 @@ export const mockAddresses = {
 };
 
 export const mockReviews = {
-  "0x10ed43c718714eb63d5aa57b78b54704e256024e": [
+  "0x5b5e44da9718288244110e66a7cA6C537f36f948": [
     {
       reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
       image: "/1.png",
       score: 5.0,
       stars: 500,
       review:
-        "PancakeSwap is a game-changer for DeFi enthusiasts! The platform offers unparalleled transparency, security, and user-friendliness. The team behind PancakeSwap is extremely responsive and committed to providing a seamless user experience. I highly recommend this protocol for anyone interested in DeFi.",
+        "Forge is a game-changer for DeFi enthusiasts! The platform offers unparalleled transparency, security, and user-friendliness. The team behind Forge is extremely responsive and committed to providing a seamless user experience. I highly recommend this protocol for anyone interested in DeFi.",
       createdAt: 1678032357324,
     },
     {
@@ -303,7 +303,7 @@ export const mockReviews = {
       score: 4.68,
       stars: 400,
       review:
-        "I've been using PancakeSwap for a few months now and it's been nothing but smooth sailing. The protocol offers high yields with minimal risk, and the user interface is intuitive and easy to use. The team is also very transparent about their operations, which adds to the overall sense of trustworthiness. UI could use a revamp.",
+        "I've been using Forge for a few months now and it's been nothing but smooth sailing. The protocol offers high yields with minimal risk, and the user interface is intuitive and easy to use. The team is also very transparent about their operations, which adds to the overall sense of trustworthiness. UI could use a revamp.",
       createdAt: 1678002357324,
     },
     {
@@ -312,7 +312,7 @@ export const mockReviews = {
       score: 3.78,
       stars: 400,
       review:
-        "PancakeSwap is an innovative DeFi protocol that is paving the way for a more secure and transparent decentralized finance ecosystem. The platform's unique features, such as the Velo governance token and the VUSD stablecoin, make it stand out from other DeFi protocols. Sometimes liquidity issues in certain pairs.",
+        "Forge is an innovative DeFi protocol that is paving the way for a more secure and transparent decentralized finance ecosystem. The platform's unique features, such as the Velo governance token and the VUSD stablecoin, make it stand out from other DeFi protocols. Sometimes liquidity issues in certain pairs.",
       createdAt: 1677922357324,
     },
     {
@@ -321,7 +321,7 @@ export const mockReviews = {
       score: 1.0,
       stars: 500,
       review:
-        "I've been a DeFi enthusiast for a while, and I must say that PancakeSwap is one of the best protocols I've used so far. The platform's user-friendly interface, high yields, and transparent operations make it a top choice for anyone looking to earn passive income in the DeFi space. Keep up the great work, PancakeSwap team!",
+        "I've been a DeFi enthusiast for a while, and I must say that Forge is one of the best protocols I've used so far. The platform's user-friendly interface, high yields, and transparent operations make it a top choice for anyone looking to earn passive income in the DeFi space. Keep up the great work, Forge team!",
       createdAt: 1677922357324,
     },
   ],
@@ -395,23 +395,23 @@ export const scoreMap = {
 export const reviews = [
   {
     reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "PancakeSwap is the best decentralized exchange app I have ever used! It's fast, secure, and easy to use.",
+      "Forge is the best decentralized exchange app I have ever used! It's fast, secure, and easy to use.",
     createdAt: "2023-04-12 07:11:34",
   },
   {
     reviewer: "0xa57Bd00134B2850B2a1c55860c9e9ea100fDd6CF",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 4,
     review:
-      "I love PancakeSwap! It's so easy to use and has a great interface. I can trade my favorite cryptocurrencies with ease.",
+      "I love Forge! It's so easy to use and has a great interface. I can trade my favorite cryptocurrencies with ease.",
     createdAt: "2023-04-06 02:55:53",
   },
   {
     reviewer: "0x9507c04B10486547584C37bCBd931B2a4FeE9A41",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
       "I've been using it for a few weeks now and I'm so impressed with how easy it is to use. It's perfect for beginners like me.",
@@ -419,102 +419,102 @@ export const reviews = [
   },
   {
     reviewer: "0xCBD6832Ebc203e49E2B771897067fce3c58575ac",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "The PancakeSwap app is fantastic! It's easy to navigate and makes trading cryptocurrencies a breeze. Highly recommended!",
+      "The Forge app is fantastic! It's easy to navigate and makes trading cryptocurrencies a breeze. Highly recommended!",
     createdAt: "2023-04-05 16:12:48",
   },
   {
     reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "PancakeSwap is the best! I've used other decentralized exchanges in the past, but none of them compare to PancakeSwap.",
+      "Forge is the best! I've used other decentralized exchanges in the past, but none of them compare to Forge.",
     createdAt: "2023-04-11 23:19:36",
   },
   {
     reviewer: "0xa57Bd00134B2850B2a1c55860c9e9ea100fDd6CF",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "I love the PancakeSwap app! It's so easy to use and makes trading cryptocurrencies a breeze. Highly recommended!",
+      "I love the Forge app! It's so easy to use and makes trading cryptocurrencies a breeze. Highly recommended!",
     createdAt: "2023-04-13 09:44:52",
   },
   {
     reviewer: "0x9507c04B10486547584C37bCBd931B2a4FeE9A41",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 4,
     review:
-      "PancakeSwap is the future of decentralized exchanges. It's fast, secure, and easy to use. I can't imagine using any other app.",
+      "Forge is the future of decentralized exchanges. It's fast, secure, and easy to use. I can't imagine using any other app.",
     createdAt: "2023-04-08 04:31:40",
   },
 
   {
     reviewer: "0xCBD6832Ebc203e49E2B771897067fce3c58575ac",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "I've been using PancakeSwap for a few months now and it's amazing! It's the best decentralized exchange app out there.",
+      "I've been using Forge for a few months now and it's amazing! It's the best decentralized exchange app out there.",
     createdAt: "2023-04-06 21:28:43",
   },
   {
     reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review: "I've recommended it to all my friends who trade cryptocurrencies.",
     createdAt: "2023-04-07 00:53:12",
   },
   {
     reviewer: "0xa57Bd00134B2850B2a1c55860c9e9ea100fDd6CF",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "I can't recommend PancakeSwap enough! It's fast, reliable, and has a great user interface. Trading cryptocurrencies has never been easier.",
+      "I can't recommend Forge enough! It's fast, reliable, and has a great user interface. Trading cryptocurrencies has never been easier.",
     createdAt: "2023-04-10 01:56:34",
   },
   {
     reviewer: "0x9507c04B10486547584C37bCBd931B2a4FeE9A41",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "PancakeSwap is the best decentralized exchange app I've ever used. It's fast, secure, and easy to use.",
+      "Forge is the best decentralized exchange app I've ever used. It's fast, secure, and easy to use.",
     createdAt: "2023-04-04 18:25:56",
   },
   {
     reviewer: "0xCBD6832Ebc203e49E2B771897067fce3c58575ac",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 4,
     review:
-      "I love using PancakeSwap! It's so easy to use and makes trading cryptocurrencies a breeze.",
+      "I love using Forge! It's so easy to use and makes trading cryptocurrencies a breeze.",
     createdAt: "2023-04-09 12:13:24",
   },
   {
     reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review: "I've been using it for a few months now and it's so easy to use.",
     createdAt: "2023-04-12 22:42:07",
   },
   {
     reviewer: "0xa57Bd00134B2850B2a1c55860c9e9ea100fDd6CF",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "I've tried other decentralized exchanges in the past, but PancakeSwap is by far the best. It's fast, secure, and easy to use.",
+      "I've tried other decentralized exchanges in the past, but Forge is by far the best. It's fast, secure, and easy to use.",
     createdAt: "2023-04-14 04:49:05",
   },
   {
     reviewer: "0x9507c04B10486547584C37bCBd931B2a4FeE9A41",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "PancakeSwap is amazing! It's so easy to use and has a great user interface. I can trade my favorite cryptocurrencies with ease.",
+      "Forge is amazing! It's so easy to use and has a great user interface. I can trade my favorite cryptocurrencies with ease.",
     createdAt: "2023-04-05 14:23:37",
   },
   {
     reviewer: "0xCBD6832Ebc203e49E2B771897067fce3c58575ac",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
       "I've been using it for a few weeks now and it's perfect for beginners like me.",
@@ -522,10 +522,10 @@ export const reviews = [
   },
   {
     reviewer: "0xe688b84b23f322a994a53dbf8e15fa82cdb71127",
-    reviewee: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+    reviewee: "0x5b5e44da9718288244110e66a7cA6C537f36f948",
     score: 5,
     review:
-      "I love PancakeSwap! It's fast, reliable, and has a great user interface. Trading cryptocurrencies has never been easier.",
+      "I love Forge! It's fast, reliable, and has a great user interface. Trading cryptocurrencies has never been easier.",
     createdAt: "2023-04-13 21:37:28",
   },
 ];

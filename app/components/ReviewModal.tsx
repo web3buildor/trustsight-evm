@@ -33,7 +33,7 @@ import { useEffect, useState } from "react";
 import { Web3Storage } from "web3.storage";
 import axios from "axios";
 
-const REGISTRY = "0x8d52577beae02D3FE7d8C33AF7f5B00c291C7603";
+const REGISTRY = "0x49e13b04855F3A9d8BcCDFdcf431DFD49C22EA59";
 
 const WEB3_STORAGE_TOKEN = process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY;
 
@@ -72,7 +72,7 @@ function ReviewModal({
 }: Props) {
   const { data: signer } = useSigner();
   const [comment, setComment] = useState("");
-  const [txnHash, setTxnHash] = useState<string>("");
+  const [txnHash, setTxnHash] = useState<any>();
   const [reviewMap, setReviewMap] = useState({
     trust: { reviewee: "", key: "", val: 0 },
   });
@@ -220,7 +220,7 @@ function ReviewModal({
       reviewDeepCopy[subscore] = review;
     });
     setReviewMap(reviewDeepCopy);
-  }, [address, category, reviewMap, subscores]);
+  }, [address, category, subscores]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -371,8 +371,8 @@ function ReviewModal({
           {(isSuccess && data) || txnHash ? (
             <ChakraLink
               isExternal
-              href={`https://testnet.bscscan.com/tx/${
-                txnHash === "" ? data.hash : txnHash
+              href={`https://testnet.escan.live/tx/${
+                txnHash === "" ? data.hash : txnHash.hash
               }`}
             >
               <Button className={styles.submitButton}>View Transaction</Button>

@@ -155,7 +155,7 @@ main();
 // Add an review to the contract with the calculated trust score
 async function createReview(recipient, score) {
   const provider = new hre.ethers.providers.JsonRpcProvider(
-    process.env.BSC_TESTNET_RPC_URL
+    process.env.EVMOS_TESTNET_RPC_URL
   );
   const wallet = new hre.ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
   const TrustScoreRegistry = await hre.ethers.getContractFactory(

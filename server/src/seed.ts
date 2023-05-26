@@ -48,10 +48,7 @@ function mapReviews(reviews: Review[]): Result[] {
     innovative: getRandomFourOrFive(),
     liquidity: getRandomFourOrFive(),
     tokenomics: getRandomFourOrFive(),
-    reviewer:
-      review.reviewer != "0x078F651c82da4800d654351bBE07d4B535B21DfA"
-        ? addresses[idx]
-        : review.reviewer,
+    reviewer: addresses[idx],
     reviewee: review.reviewee,
     transaction: null,
     trust: review.score,
@@ -65,10 +62,7 @@ function getRandomFourOrFive(): number {
   return Math.random() > 0.5 ? 5 : 4;
 }
 
-const MONGO_USER = process.env.MONGO_USER ?? "";
-const MONGO_PW = process.env.MONGO_PW ?? "";
-
-const uri = `mongodb+srv://${MONGO_USER}:${MONGO_PW}@cluster0.hsk5jk6.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.MONGO_URL ?? "";
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -82,22 +76,22 @@ async function main() {
   try {
     await client.connect();
 
-    // const addressesCollection = await client
-    //   .db("trustsight")
-    //   .collection("addresses");
+    const addressesCollection = await client
+      .db("trustsight-evmos")
+      .collection("addresses");
 
-    // const addressKeys = Object.keys(addresses);
+    const addressKeys = Object.keys(addresses);
 
-    // for (let i = 0; i < addressKeys.length; i++) {
-    //   await addressesCollection.updateOne(
-    //     { _id: addressKeys[i] as any },
-    //     { $set: addresses[addressKeys[i]] },
-    //     { upsert: true }
-    //   );
-    // }
+    for (let i = 0; i < addressKeys.length; i++) {
+      await addressesCollection.updateOne(
+        { _id: addressKeys[i] as any },
+        { $set: addresses[addressKeys[i]] },
+        { upsert: true }
+      );
+    }
 
     const reviewsCollection = await client
-      .db("trustsight")
+      .db("trustsight-evmos")
       .collection("reviews");
 
     const result = mapReviews(reviews);

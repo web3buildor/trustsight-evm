@@ -1,10 +1,10 @@
 # TrustScore Registry
 
-This project is a trust scoring system, built on top of Binance Smart Chain blockchain, that uses the Eigentrust algorithm for computing trust scores in a decentralized network.
+This project is a trust scoring system, built on top of Evmos blockchain, that uses the Eigentrust algorithm for computing trust scores in a decentralized network.
 
 ## Usage
 
-The `main()` function is the entry point of the script. It starts by attaching to the `TrustScoreRegistry` contract on the Binance Smart Chain network. It then encodes a trust key and sets up a filter to listen for `ReviewCreated` events related to that key.
+The `main()` function is the entry point of the script. It starts by attaching to the `TrustScoreRegistry` contract on the Evmos network. It then encodes a trust key and sets up a filter to listen for `ReviewCreated` events related to that key.
 
 The `TrustScoreRegistry` contract is queried for `ReviewCreated` events. For each event, the creator and recipient are extracted and a trust relationship is added to the pool. The initial trust scores for each recipient are also set.
 
@@ -30,8 +30,8 @@ The primary functions of this script are:
 You need to setup the following environment variables:
 
 - `CONTRACT_ADDRESS`: The address of the deployed `TrustScoreRegistry` contract.
-- `BSC_TESTNET_RPC_URL`: The Binance Smart Chain Testnet RPC URL.
-- `PRIVATE_KEY`: The private key of the Binance Smart Chain account.
+- `EVMOS_TESTNET_RPC_URL`: The Evmos Testnet RPC URL.
+- `PRIVATE_KEY`: The private key of the Evmos account.
 
 Please make sure to replace these with your actual values.
 

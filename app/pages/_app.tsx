@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import Head from "next/head";
 
-import { bscTestnet, bsc } from "wagmi/chains";
+import { evmosTestnet, evmos } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
@@ -21,11 +21,8 @@ import "@styles/globals.css";
 import Navbar from "@components/Navbar";
 
 const { chains, provider } = configureChains(
-  [bscTestnet, bsc],
-  [
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY } as any),
-    publicProvider(),
-  ]
+  [evmosTestnet, evmos],
+  [publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({

@@ -51,7 +51,13 @@ function Feed() {
   useEffect(() => {
     if (reviews.length === 0) fetchReviews();
     if (followerReviews.length === 0) fetchFollowingReviews();
-  }, [selectedCategory, reviews, fetchReviews, fetchFollowingReviews]);
+  }, [
+    selectedCategory,
+    reviews,
+    fetchReviews,
+    fetchFollowingReviews,
+    followerReviews.length,
+  ]);
 
   const handleLoadMore = () => {
     setLoadMoreCount(loadMoreCount + 1);
